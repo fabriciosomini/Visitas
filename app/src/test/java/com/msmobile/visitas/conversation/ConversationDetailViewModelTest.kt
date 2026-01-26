@@ -40,7 +40,7 @@ class ConversationDetailViewModelTest {
     }
 
     @Test
-    fun `onEvent with ViewCreated event loads conversations when conversationGroupId is valid`() {
+    fun `onEvent with ViewCreated event loads conversations when firstConversationId is valid`() {
         // Arrange
         val conversationRepositoryRef = MockReferenceHolder<ConversationRepository>()
         val viewModel = createViewModel(
