@@ -19,7 +19,7 @@ class ConversationDetailViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     @Test
-    fun `onEvent with ViewCreated event does nothing when conversationGroupId is null`() {
+    fun `onEvent with ViewCreated event does nothing when firstConversationId is null`() {
         // Arrange
         val conversationRepositoryRef = MockReferenceHolder<ConversationRepository>()
         val viewModel = createViewModel(
@@ -39,7 +39,7 @@ class ConversationDetailViewModelTest {
     }
 
     @Test
-    fun `onEvent with ViewCreated event loads conversations when conversationGroupId is valid`() {
+    fun `onEvent with ViewCreated event loads conversations when firstConversationId is valid`() {
         // Arrange
         val conversationRepositoryRef = MockReferenceHolder<ConversationRepository>()
         val viewModel = createViewModel(
