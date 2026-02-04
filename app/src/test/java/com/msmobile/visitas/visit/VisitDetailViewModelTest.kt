@@ -208,6 +208,7 @@ class VisitDetailViewModelTest {
     fun `onEvent with CancelClicked discards changes when no edits made`() {
         // Arrange
         val viewModel = createViewModel()
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = null))
 
         // Act
         viewModel.onEvent(VisitDetailViewModel.UiEvent.CancelClicked)
