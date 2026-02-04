@@ -367,7 +367,7 @@ class VisitDetailViewModelTest {
         val dateTimeProvider = mock<DateTimeProvider> {
             on { nowLocalDateTime() } doReturn TEST_DATE_TIME
         }
-        val latLongParser = LatLongParser()
+        val latLongParser = mock<LatLongParser>()
 
         return VisitDetailViewModel(
             dispatchers = dispatchers,

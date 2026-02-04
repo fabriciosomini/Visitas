@@ -284,7 +284,7 @@ class VisitListViewModelTest {
         val addressProvider = mock<AddressProvider>()
         val osrmRoutingProvider = mock<OsrmRoutingProvider>()
         val calendarEventManager = mock<CalendarEventManager>()
-        val moshi = Moshi.Builder().build()
+        val moshi = mock<Moshi>()
 
         return VisitListViewModel(
             moshi = moshi,
