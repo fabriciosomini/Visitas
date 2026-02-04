@@ -2,6 +2,7 @@ package com.msmobile.visitas
 
 import com.msmobile.visitas.util.IntentState
 import com.msmobile.visitas.util.MainDispatcherRule
+import com.msmobile.visitas.util.MockReferenceHolder
 import com.msmobile.visitas.util.TimerManager
 import com.msmobile.visitas.util.TimerManager.TimerState
 import com.ramcosta.composedestinations.generated.destinations.ConversationDetailScreenDestination
@@ -123,9 +124,10 @@ class MainActivityViewModelTest {
     @Test
     fun `onEvent with IntentStateChanged updates intentState`() {
         // Arrange
-        val viewModel = createViewModel()
-        val mockUri = mock<android.net.Uri>()
-        val newIntentState = IntentState.PreviewBackupFile(mockUri)
+        val uriRef = MockReferenceHolder<android.net.Uri>()
+        val viewModel = createViewModel(uriRef = uriRef)
+        val uri = requireNotNull(uriRef.value)
+        val newIntentState = IntentState.PreviewBackupFile(uri)
 
         // Act
         viewModel.onEvent(MainActivityViewModel.UiEvent.IntentStateChanged(newIntentState))
@@ -137,9 +139,10 @@ class MainActivityViewModelTest {
     @Test
     fun `onEvent with IntentStateHandled resets intentState to None`() {
         // Arrange
-        val viewModel = createViewModel()
-        val mockUri = mock<android.net.Uri>()
-        viewModel.onEvent(MainActivityViewModel.UiEvent.IntentStateChanged(IntentState.PreviewBackupFile(mockUri)))
+        val uriRef = MockReferenceHolder<android.net.Uri>()
+        val viewModel = createViewModel(uriRef = uriRef)
+        val uri = requireNotNull(uriRef.value)
+        viewModel.onEvent(MainActivityViewModel.UiEvent.IntentStateChanged(IntentState.PreviewBackupFile(uri)))
 
         // Act
         viewModel.onEvent(MainActivityViewModel.UiEvent.IntentStateHandled)
@@ -164,11 +167,9 @@ class MainActivityViewModelTest {
     @Test
     fun `timer running state updates isTimerRunning to true`() {
         // Arrange
-        val timerFlow = MutableStateFlow<TimerState>(TimerState.Stopped)
-        val timerManager = mock<TimerManager> {
-            on { timer } doReturn timerFlow
-        }
-        val viewModel = MainActivityViewModel(timerManager)
+        val timerFlowRef = MockReferenceHolder<MutableStateFlow<TimerState>>()
+        val viewModel = createViewModel(timerFlowRef = timerFlowRef)
+        val timerFlow = requireNotNull(timerFlowRef.value)
 
         // Act
         timerFlow.value = TimerState.Running(
@@ -183,11 +184,12 @@ class MainActivityViewModelTest {
     @Test
     fun `timer paused state updates isTimerRunning to false`() {
         // Arrange
-        val timerFlow = MutableStateFlow<TimerState>(TimerState.Running(10.seconds, 1.seconds))
-        val timerManager = mock<TimerManager> {
-            on { timer } doReturn timerFlow
-        }
-        val viewModel = MainActivityViewModel(timerManager)
+        val timerFlowRef = MockReferenceHolder<MutableStateFlow<TimerState>>()
+        val viewModel = createViewModel(
+            initialTimerState = TimerState.Running(10.seconds, 1.seconds),
+            timerFlowRef = timerFlowRef
+        )
+        val timerFlow = requireNotNull(timerFlowRef.value)
         assertTrue(viewModel.uiState.value.isTimerRunning)
 
         // Act
@@ -200,8 +202,17 @@ class MainActivityViewModelTest {
         assertFalse(viewModel.uiState.value.isTimerRunning)
     }
 
-    private fun createViewModel(): MainActivityViewModel {
-        val timerFlow = MutableStateFlow<TimerState>(TimerState.Stopped)
+    private fun createViewModel(
+        initialTimerState: TimerState = TimerState.Stopped,
+        timerFlowRef: MockReferenceHolder<MutableStateFlow<TimerState>>? = null,
+        uriRef: MockReferenceHolder<android.net.Uri>? = null
+    ): MainActivityViewModel {
+        val timerFlow = MutableStateFlow(initialTimerState)
+        timerFlowRef?.value = timerFlow
+
+        val mockUri = mock<android.net.Uri>()
+        uriRef?.value = mockUri
+
         val timerManager = mock<TimerManager> {
             on { timer } doReturn timerFlow
         }

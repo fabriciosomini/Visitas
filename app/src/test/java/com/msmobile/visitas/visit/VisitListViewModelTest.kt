@@ -190,24 +190,26 @@ class VisitListViewModelTest {
     @Test
     fun `onEvent with BackupFilePreviewed sets preview backup file state`() {
         // Arrange
-        val viewModel = createViewModel()
-        val mockUri = mock<Uri>()
+        val uriRef = MockReferenceHolder<Uri>()
+        val viewModel = createViewModel(uriRef = uriRef)
+        val uri = requireNotNull(uriRef.value)
 
         // Act
-        viewModel.onEvent(VisitListViewModel.UiEvent.BackupFilePreviewed(mockUri))
+        viewModel.onEvent(VisitListViewModel.UiEvent.BackupFilePreviewed(uri))
 
         // Assert
         val state = viewModel.uiState.value.previewBackupFileState
         assertTrue(state is VisitListViewModel.PreviewBackupFileState.Previewing)
-        assertEquals(mockUri, (state as VisitListViewModel.PreviewBackupFileState.Previewing).fileUri)
+        assertEquals(uri, (state as VisitListViewModel.PreviewBackupFileState.Previewing).fileUri)
     }
 
     @Test
     fun `onEvent with RestorePreviewedBackupDialogDismissed resets preview backup file state`() {
         // Arrange
-        val viewModel = createViewModel()
-        val mockUri = mock<Uri>()
-        viewModel.onEvent(VisitListViewModel.UiEvent.BackupFilePreviewed(mockUri))
+        val uriRef = MockReferenceHolder<Uri>()
+        val viewModel = createViewModel(uriRef = uriRef)
+        val uri = requireNotNull(uriRef.value)
+        viewModel.onEvent(VisitListViewModel.UiEvent.BackupFilePreviewed(uri))
 
         // Act
         viewModel.onEvent(VisitListViewModel.UiEvent.RestorePreviewedBackupDialogDismissed)
@@ -257,11 +259,15 @@ class VisitListViewModelTest {
     }
 
     private fun createViewModel(
-        visitHouseholderRepositoryRef: MockReferenceHolder<VisitHouseholderRepository>? = null
+        visitHouseholderRepositoryRef: MockReferenceHolder<VisitHouseholderRepository>? = null,
+        uriRef: MockReferenceHolder<Uri>? = null
     ): VisitListViewModel {
         val dispatchers = DispatcherProvider(
             io = mainDispatcherRule.dispatcher
         )
+        val mockUri = mock<Uri>()
+        uriRef?.value = mockUri
+
         val locationFlow = MutableStateFlow<UserLocationProvider.UserLocation>(UserLocationProvider.UserLocation.NotAvailable)
         val userLocationProvider = mock<UserLocationProvider> {
             on { location } doReturn locationFlow

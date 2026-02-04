@@ -4,6 +4,7 @@ import android.net.Uri
 import com.msmobile.visitas.util.BackupHandler
 import com.msmobile.visitas.util.DispatcherProvider
 import com.msmobile.visitas.util.MainDispatcherRule
+import com.msmobile.visitas.util.MockReferenceHolder
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertNull
@@ -32,8 +33,11 @@ class BackupViewModelTest {
     @Test
     fun `onEvent with CreateBackup sets isLoading to true and then success result`() {
         // Arrange
-        val mockUri = mock<Uri>()
-        val viewModel = createViewModel(createBackupResult = Result.success(mockUri))
+        val uriRef = MockReferenceHolder<Uri>()
+        val viewModel = createViewModel(
+            createBackupResult = CreateBackupResult.Success,
+            uriRef = uriRef
+        )
 
         // Act
         viewModel.onEvent(
@@ -49,14 +53,14 @@ class BackupViewModelTest {
         assertTrue(state.backupResult is BackupViewModel.BackupResult.BackupCreationSuccess)
         val result = state.backupResult as BackupViewModel.BackupResult.BackupCreationSuccess
         assertEquals("Backup created", result.message)
-        assertEquals(mockUri, result.shareFileUri)
+        assertEquals(requireNotNull(uriRef.value), result.shareFileUri)
     }
 
     @Test
     fun `onEvent with CreateBackup failure sets error result`() {
         // Arrange
         // Note: The ViewModel uses RestoreFailure for all failure cases (both backup creation and restore)
-        val viewModel = createViewModel(createBackupResult = Result.failure(Exception("Test error")))
+        val viewModel = createViewModel(createBackupResult = CreateBackupResult.Failure)
 
         // Act
         viewModel.onEvent(
@@ -77,13 +81,16 @@ class BackupViewModelTest {
     @Test
     fun `onEvent with RestoreBackup success sets restore success result`() {
         // Arrange
-        val mockUri = mock<Uri>()
-        val viewModel = createViewModel(restoreBackupResult = Result.success(Unit))
+        val uriRef = MockReferenceHolder<Uri>()
+        val viewModel = createViewModel(
+            restoreBackupResult = RestoreBackupResult.Success,
+            uriRef = uriRef
+        )
 
         // Act
         viewModel.onEvent(
             BackupViewModel.UiEvent.RestoreBackup(
-                fileUri = mockUri,
+                fileUri = requireNotNull(uriRef.value),
                 successMessage = "Restore successful",
                 errorMessage = "Restore failed"
             )
@@ -100,13 +107,16 @@ class BackupViewModelTest {
     @Test
     fun `onEvent with RestoreBackup failure sets restore failure result`() {
         // Arrange
-        val mockUri = mock<Uri>()
-        val viewModel = createViewModel(restoreBackupResult = Result.failure(Exception("Test error")))
+        val uriRef = MockReferenceHolder<Uri>()
+        val viewModel = createViewModel(
+            restoreBackupResult = RestoreBackupResult.Failure,
+            uriRef = uriRef
+        )
 
         // Act
         viewModel.onEvent(
             BackupViewModel.UiEvent.RestoreBackup(
-                fileUri = mockUri,
+                fileUri = requireNotNull(uriRef.value),
                 successMessage = "Restore successful",
                 errorMessage = "Restore failed"
             )
@@ -179,20 +189,42 @@ class BackupViewModelTest {
     }
 
     private fun createViewModel(
-        createBackupResult: Result<Uri>? = null,
-        restoreBackupResult: Result<Unit>? = null
+        createBackupResult: CreateBackupResult? = null,
+        restoreBackupResult: RestoreBackupResult? = null,
+        uriRef: MockReferenceHolder<Uri>? = null
     ): BackupViewModel {
         val dispatchers = DispatcherProvider(
             io = mainDispatcherRule.dispatcher
         )
+        val mockUri = mock<Uri>()
+        uriRef?.value = mockUri
+
         val backupHandler = mock<BackupHandler> {
-            createBackupResult?.let { on { createBackupFile() } doReturn it }
-            restoreBackupResult?.let { on { restoreBackup(any()) } doReturn it }
+            when (createBackupResult) {
+                CreateBackupResult.Success -> on { createBackupFile() } doReturn Result.success(mockUri)
+                CreateBackupResult.Failure -> on { createBackupFile() } doReturn Result.failure(Exception("Test error"))
+                null -> {}
+            }
+            when (restoreBackupResult) {
+                RestoreBackupResult.Success -> on { restoreBackup(any()) } doReturn Result.success(Unit)
+                RestoreBackupResult.Failure -> on { restoreBackup(any()) } doReturn Result.failure(Exception("Test error"))
+                null -> {}
+            }
         }
 
         return BackupViewModel(
             backupHandler = backupHandler,
             dispatchers = dispatchers
         )
+    }
+
+    private sealed class CreateBackupResult {
+        data object Success : CreateBackupResult()
+        data object Failure : CreateBackupResult()
+    }
+
+    private sealed class RestoreBackupResult {
+        data object Success : RestoreBackupResult()
+        data object Failure : RestoreBackupResult()
     }
 }
