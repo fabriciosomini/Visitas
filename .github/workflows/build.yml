@@ -49,15 +49,25 @@ jobs:
           GOOGLE_SERVICES_DEBUG: ${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}
           GOOGLE_SERVICES_RELEASE: ${{ secrets.GOOGLE_SERVICES_JSON_RELEASE }}
         run: |
-          # Create for both variants with separate configs
+          # Minimal placeholder for builds without secrets (e.g. Dependabot PRs)
+          PLACEHOLDER='{"project_info":{"project_number":"0","project_id":"placeholder","storage_bucket":"placeholder.appspot.com"},"client":[{"client_info":{"mobilesdk_app_id":"1:0:android:0","android_client_info":{"package_name":"com.msmobile.visitas"}},"api_key":[{"current_key":"placeholder"}]}],"configuration_version":"1"}'
+
           mkdir -p app/src/debug app/src/release
-          printf '%s' "$GOOGLE_SERVICES_DEBUG" > app/src/debug/google-services.json
-          printf '%s' "$GOOGLE_SERVICES_RELEASE" > app/src/release/google-services.json
-          
-          if [ ! -f "app/src/debug/google-services.json" ] || [ ! -f "app/src/release/google-services.json" ]; then
-            echo "ERROR: google-services.json files were not created"
-            exit 1
+
+          if [ -n "$GOOGLE_SERVICES_DEBUG" ]; then
+            printf '%s' "$GOOGLE_SERVICES_DEBUG" > app/src/debug/google-services.json
+          else
+            echo "WARNING: GOOGLE_SERVICES_JSON_DEBUG secret not available, using placeholder"
+            printf '%s' "$PLACEHOLDER" > app/src/debug/google-services.json
           fi
+
+          if [ -n "$GOOGLE_SERVICES_RELEASE" ]; then
+            printf '%s' "$GOOGLE_SERVICES_RELEASE" > app/src/release/google-services.json
+          else
+            echo "WARNING: GOOGLE_SERVICES_JSON_RELEASE secret not available, using placeholder"
+            printf '%s' "$PLACEHOLDER" > app/src/release/google-services.json
+          fi
+
           echo "Google Services JSON files created successfully"
 
       - name: Make gradlew executable
