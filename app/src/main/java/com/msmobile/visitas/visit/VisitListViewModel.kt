@@ -86,6 +86,7 @@ constructor(
     private var nextRouteCalcJob: Job? = null
     private var nextRouteCalcInterval: Duration = INITIAL_ROUTE_CALC_INTERNAL
     private var enableNearbyVisitsAfterPermission = false
+    private var showVisitMapAfterPermission = false
 
     val uiState: StateFlow<UiState> = _uiState
 
@@ -145,6 +146,12 @@ constructor(
             enableNearbyVisitsAfterPermission = false
             handleShowNearbyVisitsToggled(showNearbyVisits = true)
         }
+
+        if (showVisitMapAfterPermission) {
+            showVisitMapAfterPermission = false
+            handleVisitMapSheetClicked()
+        }
+
         startTrackingLocation()
     }
 
@@ -392,6 +399,16 @@ constructor(
     }
 
     private fun handleVisitMapSheetClicked() {
+        showVisitMapAfterPermission = false
+
+        if (!hasLocationPermission()) {
+            showVisitMapAfterPermission = true
+            newState {
+                copy(showLocationRationale = true)
+            }
+            return
+        }
+
         newState {
             copy(
                 showVisitMapSheet = true
