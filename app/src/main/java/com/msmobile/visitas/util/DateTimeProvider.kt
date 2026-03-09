@@ -11,4 +11,8 @@ class DateTimeProvider {
     fun nowLocalDateTime(): LocalDateTime {
         return LocalDateTime.now()
     }
+
+    fun nanoTime(): Long {
+        return System.nanoTime()
+    }
 }
