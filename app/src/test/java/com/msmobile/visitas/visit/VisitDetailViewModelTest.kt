@@ -13,6 +13,7 @@ import com.msmobile.visitas.util.IdProvider
 import com.msmobile.visitas.util.LatLongParser
 import com.msmobile.visitas.util.MainDispatcherRule
 import com.msmobile.visitas.util.MockReferenceHolder
+import com.msmobile.visitas.util.VisitDataFormatter
 import com.msmobile.visitas.util.PermissionChecker
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
@@ -557,6 +558,7 @@ class VisitDetailViewModelTest {
         }
         val latLongParser = mock<LatLongParser>()
         val clipboardHandler = mock<ClipboardHandler>()
+        val visitDataFormatter = VisitDataFormatter()
         clipboardHandlerRef?.value = clipboardHandler
 
         return VisitDetailViewModel(
@@ -571,7 +573,8 @@ class VisitDetailViewModelTest {
             visitTimeValidator = visitTimeValidator,
             dateTimeProvider = dateTimeProvider,
             latLongParser = latLongParser,
-            clipboardHandler = clipboardHandler
+            clipboardHandler = clipboardHandler,
+            visitDataFormatter = visitDataFormatter
         )
     }
 
