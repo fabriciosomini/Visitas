@@ -8,7 +8,6 @@ import com.msmobile.visitas.conversation.ConversationRepository
 import com.msmobile.visitas.extension.containsAllWords
 import com.msmobile.visitas.extension.split
 import com.msmobile.visitas.extension.subListInclusive
-import com.msmobile.visitas.extension.toString
 import com.msmobile.visitas.householder.Householder
 import com.msmobile.visitas.householder.HouseholderRepository
 import com.msmobile.visitas.util.AddressProvider
@@ -16,6 +15,7 @@ import com.msmobile.visitas.util.CalendarEventManager
 import com.msmobile.visitas.util.ClipboardHandler
 import com.msmobile.visitas.util.DateTimeProvider
 import com.msmobile.visitas.util.DispatcherProvider
+import com.msmobile.visitas.util.VisitDataFormatter
 import com.msmobile.visitas.util.IdProvider
 import com.msmobile.visitas.util.LatLongParser
 import com.msmobile.visitas.util.PermissionChecker
@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
 
@@ -44,7 +43,8 @@ class VisitDetailViewModel
     private val visitTimeValidator: VisitTimeValidator,
     private val dateTimeProvider: DateTimeProvider,
     private val latLongParser: LatLongParser,
-    private val clipboardHandler: ClipboardHandler
+    private val clipboardHandler: ClipboardHandler,
+    private val visitDataFormatter: VisitDataFormatter
 ) : ViewModel() {
     private val didEditableDataChange: Boolean
         get() {
@@ -161,42 +161,18 @@ class VisitDetailViewModel
         val state = _uiState.value
         val householder = state.householder
         val nextPendingVisit = state.visitList.firstOrNull { !it.isDone }
-        val lat = householder.addressLatitude
-        val lng = householder.addressLongitude
 
-        val text = buildString {
-            appendLine(householder.name)
-
-            if (householder.address.isNotEmpty()) {
-                appendLine()
-                appendLine(householder.address)
-            }
-
-            if (lat != null && lng != null) {
-                appendLine("https://www.google.com/maps/search/?api=1&query=$lat,$lng")
-            }
-
-            if (!householder.notes.isNullOrBlank()) {
-                appendLine()
-                appendLine(householder.notes)
-            }
-
-            if (householder.preferredDay != VisitPreferredDay.ANY) {
-                appendLine(householder.preferredDay.name.lowercase()
-                    .replaceFirstChar { it.uppercase() })
-            }
-
-            if (householder.preferredTime != VisitPreferredTime.ANY) {
-                appendLine(householder.preferredTime.name.lowercase()
-                    .replaceFirstChar { it.uppercase() })
-            }
-
-            if (nextPendingVisit != null) {
-                appendLine()
-                appendLine(nextPendingVisit.subject)
-                appendLine(nextPendingVisit.date.toString(Locale.getDefault()))
-            }
-        }.trim()
+        val text = visitDataFormatter.format(
+            name = householder.name,
+            address = householder.address,
+            latitude = householder.addressLatitude,
+            longitude = householder.addressLongitude,
+            notes = householder.notes,
+            preferredDay = householder.preferredDay,
+            preferredTime = householder.preferredTime,
+            nextPendingVisitSubject = nextPendingVisit?.subject,
+            nextPendingVisitDate = nextPendingVisit?.date
+        )
 
         clipboardHandler.copyToClipboard(text)
 
