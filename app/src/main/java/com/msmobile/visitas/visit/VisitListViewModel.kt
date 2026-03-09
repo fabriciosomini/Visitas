@@ -9,6 +9,7 @@ import com.msmobile.visitas.extension.containsAllWords
 import com.msmobile.visitas.preference.PreferenceRepository
 import com.msmobile.visitas.util.AddressProvider
 import com.msmobile.visitas.util.CalendarEventManager
+import com.msmobile.visitas.util.DateTimeProvider
 import com.msmobile.visitas.util.DispatcherProvider
 import com.msmobile.visitas.util.PermissionChecker
 import com.msmobile.visitas.util.UserLocationProvider
@@ -52,7 +53,7 @@ constructor(
     private val permissionChecker: PermissionChecker,
     private val osrmRoutingProvider: com.msmobile.visitas.routing.OsrmRoutingProvider,
     private val calendarEventManager: CalendarEventManager,
-    private val dateTimeProvider: com.msmobile.visitas.util.DateTimeProvider
+    private val dateTimeProvider: DateTimeProvider
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(
         UiState(
