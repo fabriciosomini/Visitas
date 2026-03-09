@@ -9,12 +9,11 @@ import com.msmobile.visitas.extension.containsAllWords
 import com.msmobile.visitas.preference.PreferenceRepository
 import com.msmobile.visitas.util.AddressProvider
 import com.msmobile.visitas.util.CalendarEventManager
+import com.msmobile.visitas.util.DateTimeProvider
 import com.msmobile.visitas.util.DispatcherProvider
 import com.msmobile.visitas.util.PermissionChecker
 import com.msmobile.visitas.util.UserLocationProvider
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
+import com.msmobile.visitas.util.VisitMapAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
@@ -43,7 +41,7 @@ import kotlin.time.Duration.Companion.seconds
 class VisitListViewModel
 @Inject
 constructor(
-    private val moshi: Moshi,
+    private val visitMapAdapter: VisitMapAdapter,
     private val dispatchers: DispatcherProvider,
     private val visitRepository: VisitRepository,
     private val visitHouseholderRepository: VisitHouseholderRepository,
@@ -52,7 +50,8 @@ constructor(
     private val userLocationProvider: UserLocationProvider,
     private val permissionChecker: PermissionChecker,
     private val osrmRoutingProvider: com.msmobile.visitas.routing.OsrmRoutingProvider,
-    private val calendarEventManager: CalendarEventManager
+    private val calendarEventManager: CalendarEventManager,
+    private val dateTimeProvider: DateTimeProvider
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(
         UiState(
@@ -81,10 +80,10 @@ constructor(
             previewBackupFileState = PreviewBackupFileState.None
         )
     )
-    private val visitMapAdapter by lazy(::createVisitMapAdapter)
 
     private var nextRouteCalcJob: Job? = null
     private var nextRouteCalcInterval: Duration = INITIAL_ROUTE_CALC_INTERNAL
+    private var lastRouteCalcNanoTime: Long = 0L
     private var enableNearbyVisitsAfterPermission = false
     private var showVisitMapAfterPermission = false
 
@@ -516,6 +515,16 @@ constructor(
 
     private fun scheduleNextRouteCalculation(visitList: List<VisitHouseholderState>) {
         nextRouteCalcJob?.cancel()
+
+        val now = dateTimeProvider.nanoTime()
+
+        // Reset the interval after an arbitrary amount of time without regenerating the route
+        if (now - lastRouteCalcNanoTime > ROUTE_CALC_IDLE_THRESHOLD.inWholeNanoseconds) {
+            nextRouteCalcInterval = INITIAL_ROUTE_CALC_INTERNAL
+        }
+
+        lastRouteCalcNanoTime = now
+
         nextRouteCalcJob = viewModelScope.launch(dispatchers.io) {
             val routeCalcInterval = nextRouteCalcInterval
             nextRouteCalcInterval = SUBSEQUENT_ROUTE_CALC_INTERVAL
@@ -574,7 +583,7 @@ constructor(
 
         // Launch route optimization in background
         val mapData = fetchOptimizedRoute(visitMapData)
-        val serializedMapData = visitMapAdapter.toJson(mapData)
+        val serializedMapData = visitMapAdapter.toJson(mapData) ?: return VisitMapState.Error
         val newMapState = VisitMapState.Visits(serialized = serializedMapData)
 
         return newMapState
@@ -613,14 +622,6 @@ constructor(
         }
     }
 
-    private fun createVisitMapAdapter(): JsonAdapter<List<VisitMapData>?> {
-        return moshi.adapter<List<VisitMapData>>(
-            Types.newParameterizedType(
-                List::class.java,
-                VisitMapData::class.java
-            )
-        )
-    }
 
     private fun newState(block: UiState.() -> UiState) {
         _uiState.update(block)
@@ -873,6 +874,7 @@ constructor(
 
     companion object {
         private val INITIAL_ROUTE_CALC_INTERNAL = 0.seconds
-        private val SUBSEQUENT_ROUTE_CALC_INTERVAL = 10.seconds
+        private val SUBSEQUENT_ROUTE_CALC_INTERVAL = 2.seconds
+        private val ROUTE_CALC_IDLE_THRESHOLD = 30.seconds
     }
 }
