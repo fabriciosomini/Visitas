@@ -13,9 +13,7 @@ import com.msmobile.visitas.util.DateTimeProvider
 import com.msmobile.visitas.util.DispatcherProvider
 import com.msmobile.visitas.util.PermissionChecker
 import com.msmobile.visitas.util.UserLocationProvider
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
+import com.msmobile.visitas.util.VisitMapAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -43,7 +41,7 @@ import kotlin.time.Duration.Companion.seconds
 class VisitListViewModel
 @Inject
 constructor(
-    private val moshi: Moshi,
+    private val visitMapAdapter: VisitMapAdapter,
     private val dispatchers: DispatcherProvider,
     private val visitRepository: VisitRepository,
     private val visitHouseholderRepository: VisitHouseholderRepository,
@@ -82,7 +80,6 @@ constructor(
             previewBackupFileState = PreviewBackupFileState.None
         )
     )
-    private val visitMapAdapter by lazy(::createVisitMapAdapter)
 
     private var nextRouteCalcJob: Job? = null
     private var nextRouteCalcInterval: Duration = INITIAL_ROUTE_CALC_INTERNAL
@@ -625,14 +622,6 @@ constructor(
         }
     }
 
-    private fun createVisitMapAdapter(): JsonAdapter<List<VisitMapData>?> {
-        return moshi.adapter<List<VisitMapData>>(
-            Types.newParameterizedType(
-                List::class.java,
-                VisitMapData::class.java
-            )
-        )
-    }
 
     private fun newState(block: UiState.() -> UiState) {
         _uiState.update(block)
