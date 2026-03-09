@@ -463,6 +463,7 @@ constructor(
                         location.longitude
                     )
                 )
+                .applyFilters()
         }
     }
 
