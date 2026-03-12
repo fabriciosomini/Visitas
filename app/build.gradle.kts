@@ -8,8 +8,7 @@ plugins {
     alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.google.gms.google.services)
-    alias(libs.plugins.google.firebase.crashlytics)
+    alias(libs.plugins.sentry.android.gradle.plugin)
     alias(libs.plugins.easylauncher)
     alias(libs.plugins.androidx.room)
 }
@@ -49,6 +48,11 @@ android {
                 EnvKeys.ENCRYPTION_PASSPHRASE,
                 "\"${System.getenv(EnvKeys.ENCRYPTION_PASSPHRASE) ?: ""}\""
             )
+            buildConfigField(
+                "String",
+                "SENTRY_DSN",
+                "\"${System.getenv("SENTRY_DSN") ?: ""}\""
+            )
         }
         release {
             proguardFiles(
@@ -62,6 +66,11 @@ android {
                 "String",
                 EnvKeys.ENCRYPTION_PASSPHRASE,
                 "\"${requireEnvVariable(EnvKeys.ENCRYPTION_PASSPHRASE)}\""
+            )
+            buildConfigField(
+                "String",
+                "SENTRY_DSN",
+                "\"${System.getenv("SENTRY_DSN") ?: ""}\""
             )
         }
     }
@@ -88,6 +97,18 @@ kotlin {
 
 room {
     schemaDirectory("$projectDir/schemas")
+}
+
+sentry {
+    org.set(System.getenv("SENTRY_ORG") ?: "")
+    projectName.set(System.getenv("SENTRY_PROJECT") ?: "")
+    authToken.set(System.getenv("SENTRY_AUTH_TOKEN") ?: "")
+
+    autoUploadProguardMapping.set(
+        System.getenv("SENTRY_AUTH_TOKEN")?.isNotEmpty() == true
+    )
+
+    autoInstallation.enabled.set(false)
 }
 
 easylauncher {
@@ -129,7 +150,7 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     implementation(libs.androidx.security.crypto)
-    implementation(libs.firebase.crashlytics)
+    implementation(libs.sentry.android)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
     implementation(libs.retrofit)

@@ -2,6 +2,27 @@ package com.msmobile.visitas
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import io.sentry.android.core.SentryAndroid
 
 @HiltAndroidApp
-class VisitasApp : Application()
+class VisitasApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        initSentry()
+    }
+
+    private fun initSentry() {
+        SentryAndroid.init(this) { options ->
+            options.dsn = BuildConfig.SENTRY_DSN
+            options.environment = if (BuildConfig.DEBUG) "debug" else "release"
+            options.release = "${BuildConfig.APPLICATION_ID}@${BuildConfig.VERSION_NAME}+${BuildConfig.VERSION_CODE}"
+            options.isEnableAutoSessionTracking = true
+            options.tracesSampleRate = if (BuildConfig.DEBUG) 1.0 else 0.2
+            options.isAnrEnabled = true
+            options.isEnableActivityLifecycleBreadcrumbs = true
+            options.isEnableAppLifecycleBreadcrumbs = true
+            options.isEnableSystemEventBreadcrumbs = true
+            options.isEnableNetworkEventBreadcrumbs = true
+        }
+    }
+}
