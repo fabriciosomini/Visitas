@@ -100,18 +100,24 @@ room {
 }
 
 sentry {
-    org.set(System.getenv("SENTRY_ORG") ?: "")
-    projectName.set(System.getenv("SENTRY_PROJECT") ?: "")
-    authToken.set(System.getenv("SENTRY_AUTH_TOKEN") ?: "")
+    val sentryOrg = System.getenv(EnvKeys.SENTRY_ORG)
+    val sentryProject = System.getenv(EnvKeys.SENTRY_PROJECT)
+    val sentryAuthToken = System.getenv(EnvKeys.SENTRY_AUTH_TOKEN)
 
-    autoUploadProguardMapping.set(
-        listOf(
-            System.getenv("SENTRY_AUTH_TOKEN"),
-            System.getenv("SENTRY_ORG"),
-            System.getenv("SENTRY_PROJECT")
-        ).all { !it.isNullOrBlank() }
-    )
-    includeSourceContext.set(true)
+    if (
+        !sentryOrg.isNullOrBlank()
+        && !sentryProject.isNullOrBlank()
+        && !sentryAuthToken.isNullOrBlank()
+    ) {
+        org.set(sentryOrg)
+        projectName.set(sentryProject)
+        authToken.set(sentryAuthToken)
+        autoUploadProguardMapping.set(true)
+        includeSourceContext.set(true)
+    } else {
+        autoUploadProguardMapping.set(false)
+        includeSourceContext.set(false)
+    }
 
     tracingInstrumentation {
         enabled.set(true)
@@ -206,6 +212,9 @@ private object EnvKeys {
     const val KEYSTORE_ALIAS = "KEYSTORE_ALIAS"
     const val ENCRYPTION_PASSPHRASE = "ENCRYPTION_PASSPHRASE"
     const val SENTRY_DSN = "SENTRY_DSN"
+    const val SENTRY_ORG = "SENTRY_ORG"
+    const val SENTRY_PROJECT = "SENTRY_PROJECT"
+    const val SENTRY_AUTH_TOKEN = "SENTRY_AUTH_TOKEN"
 }
 
 private fun requireEnvVariable(key: String): String {
