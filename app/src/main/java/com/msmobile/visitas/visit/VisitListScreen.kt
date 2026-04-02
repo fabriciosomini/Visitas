@@ -65,6 +65,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -112,7 +113,6 @@ import com.ramcosta.composedestinations.spec.Direction
 import kotlinx.coroutines.delay
 import java.time.DayOfWeek
 import java.time.LocalDateTime
-import java.util.Locale
 import java.util.UUID
 
 private const val LOADING_VISITS_COUNT = 5
@@ -677,6 +677,7 @@ private fun VisitCard(
     onNavigate: (Direction) -> Unit,
 ) {
     val dateTextColor = MaterialTheme.colorScheme.primary
+    val locale = LocalConfiguration.current.locales[0]
     val isHouseholderAddressNearby =
         visit.householderAddressDistance is AddressProvider.AddressDistance.Nearby
     val context = LocalContext.current
@@ -745,7 +746,7 @@ private fun VisitCard(
             ) {
                 Text(
                     modifier = Modifier.textShimmer(isLoading),
-                    text = visit.date.toString(Locale.getDefault()),
+                    text = visit.date.toString(locale),
                     style = MaterialTheme.typography.bodyMedium,
                     color = dateTextColor
                 )
