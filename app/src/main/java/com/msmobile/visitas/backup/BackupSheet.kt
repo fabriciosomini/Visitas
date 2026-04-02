@@ -60,6 +60,8 @@ private fun BackupScreenContent(
     onEvent: (BackupViewModel.UiEvent) -> Unit
 ) {
     val context = LocalContext.current
+    val createBackupSuccessMessage = stringResource(R.string.create_backup_success)
+    val createBackupFailureMessage = stringResource(R.string.create_backup_failure)
     val restoreBackupLauncher = rememberRestoreBackupLauncher(onEvent)
 
     // Handle share intent when backup creation is successful
@@ -80,8 +82,8 @@ private fun BackupScreenContent(
             onClick = {
                 onEvent(
                     BackupViewModel.UiEvent.CreateBackup(
-                        successMessage = context.getString(R.string.create_backup_success),
-                        errorMessage = context.getString(R.string.create_backup_failure)
+                        successMessage = createBackupSuccessMessage,
+                        errorMessage = createBackupFailureMessage
                     )
                 )
             }
@@ -133,7 +135,8 @@ private fun BackupScreenContent(
 private fun rememberRestoreBackupLauncher(
     onEvent: (BackupViewModel.UiEvent) -> Unit
 ): ActivityResultLauncher<Array<String>> {
-    val context = LocalContext.current
+    val restoreBackupSuccessMessage = stringResource(R.string.restore_backup_success)
+    val restoreBackupFailureMessage = stringResource(R.string.restore_backup_failure)
     return rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri ->
@@ -141,8 +144,8 @@ private fun rememberRestoreBackupLauncher(
             onEvent(
                 BackupViewModel.UiEvent.RestoreBackup(
                     fileUri = uri,
-                    successMessage = context.getString(R.string.restore_backup_success),
-                    errorMessage = context.getString(R.string.restore_backup_failure)
+                    successMessage = restoreBackupSuccessMessage,
+                    errorMessage = restoreBackupFailureMessage
                 )
             )
         }
