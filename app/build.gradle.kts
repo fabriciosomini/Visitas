@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.sentry.android.gradle.plugin)
     alias(libs.plugins.easylauncher)
     alias(libs.plugins.androidx.room)
+    alias(libs.plugins.compose.screenshot)
 }
 
 android {
@@ -203,6 +204,7 @@ dependencies {
     kspAndroidTest(libs.hilt.android.compiler)
 
     debugImplementation(libs.ui.tooling)
+    screenshotTestImplementation(libs.ui.tooling)
 }
 
 private object EnvKeys {
