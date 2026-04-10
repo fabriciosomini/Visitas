@@ -8,6 +8,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.msmobile.visitas.di.navigationDependencies
 import com.msmobile.visitas.extension.currentDestinationWithLifecycle
+import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.util.IntentState
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.generated.NavGraphs
@@ -42,23 +43,25 @@ fun Main(
     val onNavigate = { direction: Direction ->
         destinationsNavigator.navigate(direction)
     }
-    AppScaffold(
-        uiState = uiState,
-        currentDestination = currentDestination,
-        onEvent = onEvent,
-        onNavigateToTab = onNavigateToTab,
-        onNavigate = onNavigate,
-        content = { paddingValues: PaddingValues ->
-            DestinationsNavHost(
-                navGraph = NavGraphs.root,
-                navController = navController,
-                dependenciesContainerBuilder = navigationDependencies(
-                    intentState = intentState,
-                    intentStateHandled = intentStateHandled,
-                    scaffoldConfigurationChanged = scaffoldConfigurationChanged,
-                    paddingValues = paddingValues
+    VisitasTheme {
+        AppScaffold(
+            uiState = uiState,
+            currentDestination = currentDestination,
+            onEvent = onEvent,
+            onNavigateToTab = onNavigateToTab,
+            onNavigate = onNavigate,
+            content = { paddingValues: PaddingValues ->
+                DestinationsNavHost(
+                    navGraph = NavGraphs.root,
+                    navController = navController,
+                    dependenciesContainerBuilder = navigationDependencies(
+                        intentState = intentState,
+                        intentStateHandled = intentStateHandled,
+                        scaffoldConfigurationChanged = scaffoldConfigurationChanged,
+                        paddingValues = paddingValues
+                    )
                 )
-            )
-        }
-    )
+            }
+        )
+    }
 }

@@ -87,6 +87,7 @@ import com.msmobile.visitas.extension.stringResource
 import com.msmobile.visitas.extension.textField
 import com.msmobile.visitas.extension.toString
 import com.msmobile.visitas.ui.icons.CopyDataIcon
+import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.ui.views.DateTimePicker
 import com.msmobile.visitas.ui.views.DetailFooter
 import com.msmobile.visitas.ui.views.LazyColumnWithScrollbar
@@ -402,7 +403,10 @@ private fun HouseholderAddressActionButton(
                 IconButton(onClick = {
                     onEvent(VisitDetailViewModel.UiEvent.LoadAddressClicked)
                 }) {
-                    Icon(imageVector = Icons.Rounded.LocationOn, contentDescription = stringResource(id = R.string.load_address_content_description))
+                    Icon(
+                        imageVector = Icons.Rounded.LocationOn,
+                        contentDescription = stringResource(id = R.string.load_address_content_description)
+                    )
                 }
             }
 
@@ -410,7 +414,10 @@ private fun HouseholderAddressActionButton(
                 IconButton(onClick = {
                     onEvent(VisitDetailViewModel.UiEvent.LookUpAddressFromLatLongClicked)
                 }) {
-                    Icon(imageVector = Icons.Rounded.TravelExplore, contentDescription = stringResource(id = R.string.lookup_address_content_description))
+                    Icon(
+                        imageVector = Icons.Rounded.TravelExplore,
+                        contentDescription = stringResource(id = R.string.lookup_address_content_description)
+                    )
                 }
             }
 
@@ -1042,18 +1049,20 @@ private fun NextVisitSuggestionButton(show: Boolean, onClick: () -> Unit) {
 private fun VisitDetailScreenPreview(
     @PreviewParameter(VisitDetailPreviewConfigProvider::class) config: VisitDetailPreviewConfig
 ) {
-    AppScaffold(
-        uiState = config.mainActivityUiState,
-        currentDestination = VisitDetailScreenDestination,
-        onEvent = {},
-        onNavigateToTab = {},
-        onNavigate = {}
-    ) {
-        VisitDetailScreenContent(
-            navigator = EmptyDestinationsNavigator,
-            householderId = config.householderId,
-            uiState = config.uiState,
-            onEvent = {}
-        )
+    VisitasTheme {
+        AppScaffold(
+            uiState = config.mainActivityUiState,
+            currentDestination = VisitDetailScreenDestination,
+            onEvent = {},
+            onNavigateToTab = {},
+            onNavigate = {}
+        ) {
+            VisitDetailScreenContent(
+                navigator = EmptyDestinationsNavigator,
+                householderId = config.householderId,
+                uiState = config.uiState,
+                onEvent = {}
+            )
+        }
     }
 }

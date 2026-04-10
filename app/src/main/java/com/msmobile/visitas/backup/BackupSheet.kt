@@ -29,6 +29,7 @@ import com.msmobile.visitas.AppScaffold
 import com.msmobile.visitas.MainActivityViewModel
 import com.msmobile.visitas.R
 import com.msmobile.visitas.extension.showShareIntent
+import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.util.IntentState
 import com.msmobile.visitas.util.borderPadding
 import com.ramcosta.composedestinations.generated.destinations.VisitListScreenDestination
@@ -155,27 +156,33 @@ private fun rememberRestoreBackupLauncher(
 @Preview
 @Composable
 fun BackupScreenPreview() {
-    AppScaffold(
-        uiState = MainActivityViewModel.UiState(
-            scaffoldState = MainActivityViewModel.ScaffoldState(
-                showBottomBar = false,
-                showFAB = false
+    VisitasTheme {
+        AppScaffold(
+            uiState = MainActivityViewModel.UiState(
+                scaffoldState = MainActivityViewModel.ScaffoldState(
+                    showBottomBar = false,
+                    showFAB = false
+                ),
+                eventState = MainActivityViewModel.UiEventState.Idle,
+                intentState = IntentState.None
             ),
-            eventState = MainActivityViewModel.UiEventState.Idle,
-            intentState = IntentState.None
-        ),
-        currentDestination = VisitListScreenDestination,
-        onEvent = {},
-        onNavigateToTab = {},
-        onNavigate = {}
-    ) {
-        BackupScreenContent(
-            uiState = BackupViewModel.UiState(
-                isLoading = false,
-                backupResult = BackupViewModel.BackupResult.RestoreFailure(message = stringResource(R.string.restore_backup_failure))
-            ),
-            onEvent = {}
-        )
+            currentDestination = VisitListScreenDestination,
+            onEvent = {},
+            onNavigateToTab = {},
+            onNavigate = {}
+        ) {
+            BackupScreenContent(
+                uiState = BackupViewModel.UiState(
+                    isLoading = false,
+                    backupResult = BackupViewModel.BackupResult.RestoreFailure(
+                        message = stringResource(
+                            R.string.restore_backup_failure
+                        )
+                    )
+                ),
+                onEvent = {}
+            )
+        }
     }
 }
 

@@ -32,35 +32,33 @@ fun AppScaffold(
     content: @Composable (PaddingValues) -> Unit
 ) {
     val showBottomBar = uiState.scaffoldState.showBottomBar
-    VisitasTheme {
-        Scaffold(floatingActionButton = {
-            if (uiState.scaffoldState.showFAB) {
-                FloatingActionButton(onClick = {
-                    onEvent(MainActivityViewModel.UiEvent.FabClicked(currentDestination = currentDestination))
-                }) {
-                    Icon(
-                        Icons.Rounded.Add,
-                        stringResource(id = R.string.add)
-                    )
-                }
+    Scaffold(floatingActionButton = {
+        if (uiState.scaffoldState.showFAB) {
+            FloatingActionButton(onClick = {
+                onEvent(MainActivityViewModel.UiEvent.FabClicked(currentDestination = currentDestination))
+            }) {
+                Icon(
+                    Icons.Rounded.Add,
+                    stringResource(id = R.string.add)
+                )
             }
-        }, bottomBar = {
-            if (showBottomBar) {
-                BottomNavigation(currentDestination, onNavigateToTab)
-            }
-        }) { paddingValues ->
-            Surface(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        top = paddingValues.calculateTopPadding(),
-                        bottom = paddingValues.calculateBottomPadding()
-                    ),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                content(paddingValues)
-                StateHandler(uiState, onEvent, onNavigate)
-            }
+        }
+    }, bottomBar = {
+        if (showBottomBar) {
+            BottomNavigation(currentDestination, onNavigateToTab)
+        }
+    }) { paddingValues ->
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding()
+                ),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            content(paddingValues)
+            StateHandler(uiState, onEvent, onNavigate)
         }
     }
 }

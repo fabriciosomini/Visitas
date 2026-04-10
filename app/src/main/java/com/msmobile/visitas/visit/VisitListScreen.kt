@@ -91,6 +91,7 @@ import com.msmobile.visitas.extension.textShimmer
 import com.msmobile.visitas.extension.toString
 import com.msmobile.visitas.extension.tonalButtonColors
 import com.msmobile.visitas.summary.SummaryViewModel
+import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.ui.views.MonthNavigator
 import com.msmobile.visitas.ui.views.MonthNavigatorEvent
 import com.msmobile.visitas.ui.views.PermissionRationaleSheet
@@ -639,7 +640,10 @@ private fun VisitListFilterMenu(
                     Text(text = visitFilterOption)
                 }, trailingIcon = {
                     if (uiState.selectedVisitFilterOption == option) {
-                        Icon(imageVector = Icons.Rounded.Check, contentDescription = visitFilterOption)
+                        Icon(
+                            imageVector = Icons.Rounded.Check,
+                            contentDescription = visitFilterOption
+                        )
                     }
                 }, onClick = {
                     onEvent(VisitListViewModel.UiEvent.VisitsFilterOptionSelected(option = option))
@@ -1007,26 +1011,28 @@ private fun VisitMapErrorState() {
 private fun VisitListScreenPreview(
     @PreviewParameter(VisitListPreviewConfigProvider::class) config: VisitListPreviewConfig
 ) {
-    AppScaffold(
-        uiState = config.mainActivityUiState,
-        currentDestination = VisitListScreenDestination,
-        onEvent = {},
-        onNavigateToTab = {},
-        onNavigate = {}
-    ) { paddingValues ->
-        VisitListScreenContent(
-            paddingValues = paddingValues,
-            summaryUiState = config.summaryUiState,
-            visitListUiState = config.visitListUiState,
-            backupUiState = BackupViewModel.UiState(),
-            intentState = IntentState.None,
-            onSummaryEvent = {},
-            onVisitListEvent = {},
-            onBackupSheetEvent = {},
-            onMonthPickerEvent = {},
-            onNavigate = {},
-            onIntentStateHandled = {},
-            onVisitMapEvent = {}
-        )
+    VisitasTheme {
+        AppScaffold(
+            uiState = config.mainActivityUiState,
+            currentDestination = VisitListScreenDestination,
+            onEvent = {},
+            onNavigateToTab = {},
+            onNavigate = {}
+        ) { paddingValues ->
+            VisitListScreenContent(
+                paddingValues = paddingValues,
+                summaryUiState = config.summaryUiState,
+                visitListUiState = config.visitListUiState,
+                backupUiState = BackupViewModel.UiState(),
+                intentState = IntentState.None,
+                onSummaryEvent = {},
+                onVisitListEvent = {},
+                onBackupSheetEvent = {},
+                onMonthPickerEvent = {},
+                onNavigate = {},
+                onIntentStateHandled = {},
+                onVisitMapEvent = {}
+            )
+        }
     }
 }
