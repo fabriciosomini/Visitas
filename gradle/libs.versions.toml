@@ -30,6 +30,7 @@ play-app-update = "2.1.0"
 play-services = "21.3.0"
 retrofit = "3.0.0"
 room = "2.8.4"
+screenshot-validation-api = "0.0.1-alpha14"
 security-crypto = "1.1.0"
 sentry = "8.38.0"
 sentry-gradle-plugin = "6.4.0"
@@ -75,6 +76,7 @@ retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", v
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+screenshot-validation-api = { group = "com.android.tools.screenshot", name = "screenshot-validation-api", version.ref = "screenshot-validation-api" }
 sentry-android = { group = "io.sentry", name = "sentry-android" }
 sentry-bom = { group = "io.sentry", name = "sentry-bom", version.ref = "sentry" }
 sentry-compose = { group = "io.sentry", name = "sentry-compose-android" }

@@ -183,6 +183,7 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi)
+    implementation(libs.screenshot.validation.api)
     ksp(libs.room.compiler)
     ksp(libs.moshi.kotlin.codegen)
     ksp(libs.compose.destinations.ksp)
