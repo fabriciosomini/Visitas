@@ -88,6 +88,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
 }
 
 kotlin {
