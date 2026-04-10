@@ -9,7 +9,7 @@ import com.msmobile.visitas.util.IntentState
 import java.time.LocalDateTime
 import java.util.UUID
 
-private val previewDate1 = LocalDateTime.of(2024, 1, 15, 10, 0)
+private val previewDate1 = LocalDateTime.of(2024, 1, 15, 10, 12)
 private val previewDate2 = previewDate1.plusWeeks(1)
 private val previewDate3 = previewDate1.plusWeeks(2)
 
