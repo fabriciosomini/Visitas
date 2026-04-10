@@ -11,7 +11,7 @@ class DateTimePickerScreenshotTest {
     @Preview
     @Composable
     internal fun DateTimePickerPreviewTest(
-        @PreviewParameter(PreviewConfigProvider::class) config: PreviewConfig
+        @PreviewParameter(DateTimePickerPreviewConfigProvider::class) config: DateTimePickerPreviewConfig
     ) {
         DateTimePickerPreview(config)
     }
