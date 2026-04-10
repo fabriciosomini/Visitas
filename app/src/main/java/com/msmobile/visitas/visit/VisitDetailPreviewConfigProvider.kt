@@ -1,5 +1,6 @@
 package com.msmobile.visitas.visit
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.msmobile.visitas.MainActivityViewModel
 import com.msmobile.visitas.R
@@ -8,8 +9,13 @@ import com.msmobile.visitas.util.StringResource
 import java.time.LocalDateTime
 import java.util.UUID
 
-class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPreviewConfig> {
-    override val values: Sequence<VisitDetailPreviewConfig> = sequenceOf(
+private val previewDate1 = LocalDateTime.of(2024, 1, 15, 10, 12)
+private val previewDate2 = previewDate1.plusWeeks(1)
+
+@VisibleForTesting
+internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPreviewConfig> {
+
+    private val previewConfigLight = sequenceOf(
         VisitDetailPreviewConfig(
             configName = "New Visit",
             mainActivityUiState = previewMainActivityUiState,
@@ -29,7 +35,7 @@ class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPre
                     VisitDetailViewModel.VisitState(
                         id = UUID.randomUUID(),
                         subject = "",
-                        date = LocalDateTime.now(),
+                        date = previewDate1,
                         isDone = false,
                         householderId = UUID.randomUUID(),
                         canBeRemoved = false,
@@ -50,7 +56,8 @@ class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPre
                         caretPosition = 0
                     )
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         VisitDetailPreviewConfig(
             configName = "Edit Visit",
@@ -60,7 +67,8 @@ class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPre
                 visitList = listOf(
                     previewVisitUiState.copy(canBeRemoved = false)
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         VisitDetailPreviewConfig(
             configName = "Loading Address",
@@ -71,7 +79,8 @@ class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPre
                     address = "",
                     isLoadingAddress = true
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         VisitDetailPreviewConfig(
             configName = "Multiple Visits",
@@ -87,7 +96,8 @@ class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPre
                         canBeRemoved = true
                     )
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         VisitDetailPreviewConfig(
             configName = "Next Visit Suggestion",
@@ -105,7 +115,8 @@ class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPre
                         canBeRemoved = true
                     )
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         VisitDetailPreviewConfig(
             configName = "Time Preference Error",
@@ -131,20 +142,32 @@ class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPre
                     )
                 ),
                 eventState = VisitDetailViewModel.UiEventState.ValidationError
-            )
+            ),
+            isDarkMode = false
         ),
     )
 
-    override fun getDisplayName(index: Int): String? {
+    private val previewConfigDark = previewConfigLight.map { config ->
+        config.copy(
+            configName = "${config.configName} - Dark Mode",
+            isDarkMode = true
+        )
+    }
+
+    override val values: Sequence<VisitDetailPreviewConfig> = previewConfigLight + previewConfigDark
+
+    override fun getDisplayName(index: Int): String {
         return values.elementAt(index).configName
     }
 }
 
-data class VisitDetailPreviewConfig(
+@VisibleForTesting
+internal data class VisitDetailPreviewConfig(
     val configName: String,
     val mainActivityUiState: MainActivityViewModel.UiState,
     val householderId: UUID?,
     val uiState: VisitDetailViewModel.UiState,
+    val isDarkMode: Boolean
 )
 
 private val previewMainActivityUiState = MainActivityViewModel.UiState(
@@ -159,7 +182,7 @@ private val previewMainActivityUiState = MainActivityViewModel.UiState(
 private val previewVisitUiState = VisitDetailViewModel.VisitState(
     id = UUID.randomUUID(),
     subject = "O que é o Reino de Deus?",
-    date = LocalDateTime.now(),
+    date = previewDate2,
     isDone = true,
     householderId = UUID.randomUUID(),
     canBeRemoved = true,

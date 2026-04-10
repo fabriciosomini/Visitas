@@ -1,5 +1,6 @@
 package com.msmobile.visitas.conversation
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +50,7 @@ import com.msmobile.visitas.extension.ReadOnlyTextFieldColors
 import com.msmobile.visitas.extension.removeBottomCorner
 import com.msmobile.visitas.extension.removeTopCorner
 import com.msmobile.visitas.extension.textField
+import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.ui.views.DetailFooter
 import com.msmobile.visitas.ui.views.LazyColumnWithScrollbar
 import com.msmobile.visitas.ui.views.TextFieldClearButton
@@ -349,23 +351,26 @@ private fun StateHandler(
     }
 }
 
+@VisibleForTesting
 @Preview
 @Composable
-private fun ConversationDetailScreenPreview(
+internal fun ConversationDetailScreenPreview(
     @PreviewParameter(ConversationDetailPreviewConfigProvider::class) config: ConversationDetailPreviewConfig
 ) {
-    AppScaffold(
-        uiState = config.mainActivityUiState,
-        currentDestination = VisitDetailScreenDestination,
-        onEvent = {},
-        onNavigateToTab = {},
-        onNavigate = {}
-    ) {
-        ConversationDetailScreenContent(
-            uiState = config.uiState,
-            showDeleteButton = config.showDeleteButton,
+    VisitasTheme(config.isDarkMode) {
+        AppScaffold(
+            uiState = config.mainActivityUiState,
+            currentDestination = VisitDetailScreenDestination,
             onEvent = {},
-            onNavigateUp = {}
-        )
+            onNavigateToTab = {},
+            onNavigate = {}
+        ) {
+            ConversationDetailScreenContent(
+                uiState = config.uiState,
+                showDeleteButton = config.showDeleteButton,
+                onEvent = {},
+                onNavigateUp = {}
+            )
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.msmobile.visitas.ui.views
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Restore
 import androidx.compose.material3.AlertDialog
@@ -10,7 +11,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.msmobile.visitas.R
+import com.msmobile.visitas.ui.theme.VisitasTheme
 
 @Composable
 fun RestoreBackupDialog(
@@ -45,11 +48,16 @@ fun RestoreBackupDialog(
     )
 }
 
+@VisibleForTesting
 @Preview
 @Composable
-private fun RestoreBackupDialogPreview() {
-    RestoreBackupDialog(
-        onConfirm = {},
-        onDismiss = {}
-    )
+internal fun RestoreBackupDialogPreview(
+    @PreviewParameter(RestoreBackupDialogPreviewConfigProvider::class) config: RestoreBackupDialogPreviewConfig
+) {
+    VisitasTheme(config.isDarkMode) {
+        RestoreBackupDialog(
+            onConfirm = {},
+            onDismiss = {}
+        )
+    }
 }

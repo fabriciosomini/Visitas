@@ -1,24 +1,30 @@
 package com.msmobile.visitas.conversation
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.msmobile.visitas.MainActivityViewModel
 import com.msmobile.visitas.conversation.ConversationDetailViewModel.ConversationState
 import com.msmobile.visitas.util.IntentState
 import java.util.UUID
 
-class ConversationDetailPreviewConfigProvider : PreviewParameterProvider<ConversationDetailPreviewConfig> {
-    override val values: Sequence<ConversationDetailPreviewConfig> = sequenceOf(
+@VisibleForTesting
+internal class ConversationDetailPreviewConfigProvider :
+    PreviewParameterProvider<ConversationDetailPreviewConfig> {
+
+    private val previewConfigLight = sequenceOf(
         ConversationDetailPreviewConfig(
             configName = "With Delete Button",
             mainActivityUiState = previewMainActivityUiState,
             showDeleteButton = true,
-            uiState = previewConversationDetailUiState
+            uiState = previewConversationDetailUiState,
+            isDarkMode = false
         ),
         ConversationDetailPreviewConfig(
             configName = "Without Delete Button",
             mainActivityUiState = previewMainActivityUiState,
             showDeleteButton = false,
-            uiState = previewConversationDetailUiState
+            uiState = previewConversationDetailUiState,
+            isDarkMode = false
         ),
         ConversationDetailPreviewConfig(
             configName = "Single Conversation",
@@ -28,7 +34,8 @@ class ConversationDetailPreviewConfigProvider : PreviewParameterProvider<Convers
                 conversationList = listOf(
                     previewConversationDetailUiState.conversationList.first()
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         ConversationDetailPreviewConfig(
             configName = "Multiple Conversations",
@@ -48,20 +55,32 @@ class ConversationDetailPreviewConfigProvider : PreviewParameterProvider<Convers
                         wasRemoved = false
                     )
                 )
-            )
-        ),
+            ),
+            isDarkMode = false
+        )
     )
+
+    private val previewConfigDark = previewConfigLight.map { config ->
+        config.copy(
+            configName = "${config.configName} - Dark Mode",
+            isDarkMode = true
+        )
+    }
+
+    override val values: Sequence<ConversationDetailPreviewConfig> = previewConfigLight + previewConfigDark
 
     override fun getDisplayName(index: Int): String? {
         return values.elementAt(index).configName
     }
 }
 
-data class ConversationDetailPreviewConfig(
+@VisibleForTesting
+internal data class ConversationDetailPreviewConfig(
     val configName: String,
     val mainActivityUiState: MainActivityViewModel.UiState,
     val showDeleteButton: Boolean,
     val uiState: ConversationDetailViewModel.UiState,
+    val isDarkMode: Boolean
 )
 
 private val previewMainActivityUiState = MainActivityViewModel.UiState(

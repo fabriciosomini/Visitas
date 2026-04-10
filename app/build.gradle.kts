@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.sentry.android.gradle.plugin)
     alias(libs.plugins.easylauncher)
     alias(libs.plugins.androidx.room)
+    alias(libs.plugins.compose.screenshot)
 }
 
 android {
@@ -87,6 +88,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
 }
 
 kotlin {
@@ -203,6 +205,8 @@ dependencies {
     kspAndroidTest(libs.hilt.android.compiler)
 
     debugImplementation(libs.ui.tooling)
+    screenshotTestImplementation(libs.screenshot.validation.api)
+    screenshotTestImplementation(libs.ui.tooling)
 }
 
 private object EnvKeys {

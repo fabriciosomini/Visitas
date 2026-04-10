@@ -23,13 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.msmobile.visitas.AppScaffold
-import com.msmobile.visitas.MainActivityViewModel
 import com.msmobile.visitas.R
 import com.msmobile.visitas.extension.showShareIntent
-import com.msmobile.visitas.util.IntentState
+import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.util.borderPadding
 import com.ramcosta.composedestinations.generated.destinations.VisitListScreenDestination
 
@@ -152,30 +153,25 @@ private fun rememberRestoreBackupLauncher(
     }
 }
 
+@VisibleForTesting
 @Preview
 @Composable
-fun BackupScreenPreview() {
-    AppScaffold(
-        uiState = MainActivityViewModel.UiState(
-            scaffoldState = MainActivityViewModel.ScaffoldState(
-                showBottomBar = false,
-                showFAB = false
-            ),
-            eventState = MainActivityViewModel.UiEventState.Idle,
-            intentState = IntentState.None
-        ),
-        currentDestination = VisitListScreenDestination,
-        onEvent = {},
-        onNavigateToTab = {},
-        onNavigate = {}
-    ) {
-        BackupScreenContent(
-            uiState = BackupViewModel.UiState(
-                isLoading = false,
-                backupResult = BackupViewModel.BackupResult.RestoreFailure(message = stringResource(R.string.restore_backup_failure))
-            ),
-            onEvent = {}
-        )
+internal fun BackupScreenPreview(
+    @PreviewParameter(BackupSheetPreviewConfigProvider::class) config: BackupSheetPreviewConfig
+) {
+    VisitasTheme(config.isDarkMode) {
+        AppScaffold(
+            uiState = config.mainActivityUiState,
+            currentDestination = VisitListScreenDestination,
+            onEvent = {},
+            onNavigateToTab = {},
+            onNavigate = {}
+        ) {
+            BackupScreenContent(
+                uiState = config.backupUiState,
+                onEvent = {}
+            )
+        }
     }
 }
 

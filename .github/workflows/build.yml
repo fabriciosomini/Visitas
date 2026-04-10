@@ -96,7 +96,7 @@ jobs:
           VERSION_CODE_OFFSET: ${{ vars.VERSION_CODE_OFFSET }}
 
       - name: Build Release Bundle and Run Tests
-        run: ./gradlew bundleRelease test
+        run: ./gradlew bundleRelease test validateDebugScreenshotTest
         env:
           VERSION_CODE: ${{ steps.version.outputs.code }}
           KEYSTORE_FILE: ${{ github.workspace }}/app/keystore.jks
@@ -111,6 +111,13 @@ jobs:
         with:
           name: test-results
           path: '**/build/test-results/**/*.xml'
+
+      - name: Upload Screenshot Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshot-test-results
+          path: '**/build/reports/screenshotTest/**'
 
       - name: Upload App Bundle
         uses: actions/upload-artifact@v4
