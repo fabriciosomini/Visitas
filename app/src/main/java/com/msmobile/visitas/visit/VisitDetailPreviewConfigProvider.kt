@@ -9,6 +9,9 @@ import com.msmobile.visitas.util.StringResource
 import java.time.LocalDateTime
 import java.util.UUID
 
+private val previewDate1 = LocalDateTime.of(2024, 1, 15, 10, 0)
+private val previewDate2 = previewDate1.plusWeeks(1)
+
 @VisibleForTesting
 internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPreviewConfig> {
 
@@ -32,7 +35,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                     VisitDetailViewModel.VisitState(
                         id = UUID.randomUUID(),
                         subject = "",
-                        date = LocalDateTime.now(),
+                        date = previewDate1,
                         isDone = false,
                         householderId = UUID.randomUUID(),
                         canBeRemoved = false,
@@ -179,7 +182,7 @@ private val previewMainActivityUiState = MainActivityViewModel.UiState(
 private val previewVisitUiState = VisitDetailViewModel.VisitState(
     id = UUID.randomUUID(),
     subject = "O que é o Reino de Deus?",
-    date = LocalDateTime.now(),
+    date = previewDate2,
     isDone = true,
     householderId = UUID.randomUUID(),
     canBeRemoved = true,

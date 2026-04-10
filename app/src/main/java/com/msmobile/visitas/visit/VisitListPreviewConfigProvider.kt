@@ -9,6 +9,10 @@ import com.msmobile.visitas.util.IntentState
 import java.time.LocalDateTime
 import java.util.UUID
 
+private val previewDate1 = LocalDateTime.of(2024, 1, 15, 10, 0)
+private val previewDate2 = previewDate1.plusWeeks(1)
+private val previewDate3 = previewDate1.plusWeeks(2)
+
 @VisibleForTesting
 internal class VisitListPreviewConfigProvider : PreviewParameterProvider<VisitListPreviewConfig> {
 
@@ -90,7 +94,7 @@ private val previewMainActivityUiState = MainActivityViewModel.UiState(
 private val previewSummaryUiState = SummaryViewModel.UiState(
     returnVisitCount = "0",
     bibleStudyCount = "0",
-    selectedMonth = LocalDateTime.now(),
+    selectedMonth = previewDate1,
     shouldShowSummaryDetails = false,
     isSummaryMenuExpanded = false,
     summaryFilterOptions = listOf()
@@ -103,7 +107,7 @@ private val previewVisitListUiState = VisitListViewModel.UiState(
             householderName = "John Doe",
             householderAddress = "542 Ninth Boulevard, NY Center - Next to the train station",
             householderAddressDistance = AddressProvider.AddressDistance.Nearby(100f),
-            date = LocalDateTime.now(),
+            date = previewDate1,
             isDone = false,
             hasToBeRescheduled = false,
             isPendingVisitMenuExpanded = false,
@@ -119,7 +123,7 @@ private val previewVisitListUiState = VisitListViewModel.UiState(
             householderId = UUID.randomUUID(),
             householderName = "Jane Doe",
             householderAddress = "123 Main St",
-            date = LocalDateTime.now(),
+            date = previewDate2,
             isDone = false,
             hasToBeRescheduled = true,
             isPendingVisitMenuExpanded = false,
@@ -136,7 +140,7 @@ private val previewVisitListUiState = VisitListViewModel.UiState(
             householderId = UUID.randomUUID(),
             householderName = "Peter Doe",
             householderAddress = "123 Main St",
-            date = LocalDateTime.now(),
+            date = previewDate3,
             isDone = false,
             hasToBeRescheduled = false,
             isPendingVisitMenuExpanded = false,
@@ -159,7 +163,7 @@ private val previewVisitListUiState = VisitListViewModel.UiState(
     visitsFilterOptions = VisitListDateFilterOption.entries,
     selectedVisitFilterOption = VisitListDateFilterOption.ScheduledForNextDays,
     isVisitsFilterMenuExpanded = false,
-    selectedDate = LocalDateTime.now(),
+    selectedDate = previewDate1,
     showLocationRationale = false,
     showLocationPermissionDialog = false,
     isLoadingVisits = false,
