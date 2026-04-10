@@ -8,19 +8,23 @@ import com.msmobile.visitas.util.IntentState
 import java.util.UUID
 
 @VisibleForTesting
-internal class ConversationDetailPreviewConfigProvider : PreviewParameterProvider<ConversationDetailPreviewConfig> {
-    override val values: Sequence<ConversationDetailPreviewConfig> = sequenceOf(
+internal class ConversationDetailPreviewConfigProvider :
+    PreviewParameterProvider<ConversationDetailPreviewConfig> {
+
+    private val previewConfigLight = sequenceOf(
         ConversationDetailPreviewConfig(
             configName = "With Delete Button",
             mainActivityUiState = previewMainActivityUiState,
             showDeleteButton = true,
-            uiState = previewConversationDetailUiState
+            uiState = previewConversationDetailUiState,
+            isDarkMode = false
         ),
         ConversationDetailPreviewConfig(
             configName = "Without Delete Button",
             mainActivityUiState = previewMainActivityUiState,
             showDeleteButton = false,
-            uiState = previewConversationDetailUiState
+            uiState = previewConversationDetailUiState,
+            isDarkMode = false
         ),
         ConversationDetailPreviewConfig(
             configName = "Single Conversation",
@@ -30,7 +34,8 @@ internal class ConversationDetailPreviewConfigProvider : PreviewParameterProvide
                 conversationList = listOf(
                     previewConversationDetailUiState.conversationList.first()
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         ConversationDetailPreviewConfig(
             configName = "Multiple Conversations",
@@ -50,9 +55,19 @@ internal class ConversationDetailPreviewConfigProvider : PreviewParameterProvide
                         wasRemoved = false
                     )
                 )
-            )
-        ),
+            ),
+            isDarkMode = false
+        )
     )
+
+    private val previewConfigDark = previewConfigLight.map { config ->
+        config.copy(
+            configName = "${config.configName} - Dark Mode",
+            isDarkMode = true
+        )
+    }
+
+    override val values: Sequence<ConversationDetailPreviewConfig> = previewConfigLight + previewConfigDark
 
     override fun getDisplayName(index: Int): String? {
         return values.elementAt(index).configName
@@ -65,6 +80,7 @@ internal data class ConversationDetailPreviewConfig(
     val mainActivityUiState: MainActivityViewModel.UiState,
     val showDeleteButton: Boolean,
     val uiState: ConversationDetailViewModel.UiState,
+    val isDarkMode: Boolean
 )
 
 private val previewMainActivityUiState = MainActivityViewModel.UiState(

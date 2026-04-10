@@ -357,7 +357,7 @@ private fun StateHandler(
 internal fun ConversationDetailScreenPreview(
     @PreviewParameter(ConversationDetailPreviewConfigProvider::class) config: ConversationDetailPreviewConfig
 ) {
-    VisitasTheme {
+    VisitasTheme(config.isDarkMode) {
         AppScaffold(
             uiState = config.mainActivityUiState,
             currentDestination = VisitDetailScreenDestination,
