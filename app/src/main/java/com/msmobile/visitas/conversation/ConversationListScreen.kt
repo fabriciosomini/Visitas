@@ -1,5 +1,6 @@
 package com.msmobile.visitas.conversation
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -232,9 +233,10 @@ private fun ConversationCard(
     }
 }
 
+@VisibleForTesting
 @Preview
 @Composable
-private fun ConversationListScreenPreview(
+internal fun ConversationListScreenPreview(
     @PreviewParameter(PreviewConfigProvider::class) config: PreviewConfig
 ) {
     VisitasTheme {
@@ -282,7 +284,8 @@ private val previewConversationUiState = ConversationListViewModel.UiState(
     filter = ConversationListViewModel.ConversationFilter(search = "")
 )
 
-private class PreviewConfigProvider : PreviewParameterProvider<PreviewConfig> {
+@VisibleForTesting
+internal class PreviewConfigProvider : PreviewParameterProvider<PreviewConfig> {
     override val values: Sequence<PreviewConfig> = sequenceOf(
         PreviewConfig(
             conversationUiState = previewConversationUiState
@@ -300,7 +303,8 @@ private class PreviewConfigProvider : PreviewParameterProvider<PreviewConfig> {
     )
 }
 
-private data class PreviewConfig(
+@VisibleForTesting
+internal data class PreviewConfig(
     val conversationUiState: ConversationListViewModel.UiState
 )
 
