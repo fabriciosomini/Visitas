@@ -1051,7 +1051,7 @@ private fun NextVisitSuggestionButton(show: Boolean, onClick: () -> Unit) {
 internal fun VisitDetailScreenPreview(
     @PreviewParameter(VisitDetailPreviewConfigProvider::class) config: VisitDetailPreviewConfig
 ) {
-    VisitasTheme {
+    VisitasTheme(config.isDarkMode) {
         AppScaffold(
             uiState = config.mainActivityUiState,
             currentDestination = VisitDetailScreenDestination,

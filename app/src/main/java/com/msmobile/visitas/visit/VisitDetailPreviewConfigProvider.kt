@@ -11,7 +11,8 @@ import java.util.UUID
 
 @VisibleForTesting
 internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPreviewConfig> {
-    override val values: Sequence<VisitDetailPreviewConfig> = sequenceOf(
+
+    private val previewConfigLight = sequenceOf(
         VisitDetailPreviewConfig(
             configName = "New Visit",
             mainActivityUiState = previewMainActivityUiState,
@@ -52,7 +53,8 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                         caretPosition = 0
                     )
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         VisitDetailPreviewConfig(
             configName = "Edit Visit",
@@ -62,7 +64,8 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                 visitList = listOf(
                     previewVisitUiState.copy(canBeRemoved = false)
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         VisitDetailPreviewConfig(
             configName = "Loading Address",
@@ -73,7 +76,8 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                     address = "",
                     isLoadingAddress = true
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         VisitDetailPreviewConfig(
             configName = "Multiple Visits",
@@ -89,7 +93,8 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                         canBeRemoved = true
                     )
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         VisitDetailPreviewConfig(
             configName = "Next Visit Suggestion",
@@ -107,7 +112,8 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                         canBeRemoved = true
                     )
                 )
-            )
+            ),
+            isDarkMode = false
         ),
         VisitDetailPreviewConfig(
             configName = "Time Preference Error",
@@ -133,11 +139,21 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                     )
                 ),
                 eventState = VisitDetailViewModel.UiEventState.ValidationError
-            )
+            ),
+            isDarkMode = false
         ),
     )
 
-    override fun getDisplayName(index: Int): String? {
+    private val previewConfigDark = previewConfigLight.map { config ->
+        config.copy(
+            configName = "${config.configName} - Dark Mode",
+            isDarkMode = true
+        )
+    }
+
+    override val values: Sequence<VisitDetailPreviewConfig> = previewConfigLight + previewConfigDark
+
+    override fun getDisplayName(index: Int): String {
         return values.elementAt(index).configName
     }
 }
@@ -148,6 +164,7 @@ internal data class VisitDetailPreviewConfig(
     val mainActivityUiState: MainActivityViewModel.UiState,
     val householderId: UUID?,
     val uiState: VisitDetailViewModel.UiState,
+    val isDarkMode: Boolean
 )
 
 private val previewMainActivityUiState = MainActivityViewModel.UiState(

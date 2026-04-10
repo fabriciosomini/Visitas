@@ -1013,7 +1013,7 @@ private fun VisitMapErrorState() {
 internal fun VisitListScreenPreview(
     @PreviewParameter(VisitListPreviewConfigProvider::class) config: VisitListPreviewConfig
 ) {
-    VisitasTheme {
+    VisitasTheme(config.isDarkMode) {
         AppScaffold(
             uiState = config.mainActivityUiState,
             currentDestination = VisitListScreenDestination,

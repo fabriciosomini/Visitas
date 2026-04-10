@@ -11,24 +11,28 @@ import java.util.UUID
 
 @VisibleForTesting
 internal class VisitListPreviewConfigProvider : PreviewParameterProvider<VisitListPreviewConfig> {
-    override val values: Sequence<VisitListPreviewConfig> = sequenceOf(
+
+    private val previewConfigLight = sequenceOf(
         VisitListPreviewConfig(
             configName = "Summary details collapsed",
             mainActivityUiState = previewMainActivityUiState,
             summaryUiState = previewSummaryUiState,
             visitListUiState = previewVisitListUiState,
+            isDarkMode = false
         ),
         VisitListPreviewConfig(
             configName = "Summary details expanded",
             mainActivityUiState = previewMainActivityUiState,
             summaryUiState = previewSummaryUiState.copy(shouldShowSummaryDetails = true),
-            visitListUiState = previewVisitListUiState
+            visitListUiState = previewVisitListUiState,
+            isDarkMode = false
         ),
         VisitListPreviewConfig(
             configName = "Loading visits",
             mainActivityUiState = previewMainActivityUiState,
             summaryUiState = previewSummaryUiState,
-            visitListUiState = previewVisitListUiState.copy(isLoadingVisits = true)
+            visitListUiState = previewVisitListUiState.copy(isLoadingVisits = true),
+            isDarkMode = false
         ),
         VisitListPreviewConfig(
             configName = "Filtering visits",
@@ -37,7 +41,8 @@ internal class VisitListPreviewConfigProvider : PreviewParameterProvider<VisitLi
             visitListUiState = previewVisitListUiState.copy(
                 visitList = emptyList(),
                 filter = previewVisitListUiState.filter.copy(search = "John")
-            )
+            ),
+            isDarkMode = false
         ),
         VisitListPreviewConfig(
             configName = "Location rationale",
@@ -45,11 +50,21 @@ internal class VisitListPreviewConfigProvider : PreviewParameterProvider<VisitLi
             summaryUiState = previewSummaryUiState,
             visitListUiState = previewVisitListUiState.copy(
                 showLocationRationale = true
-            )
+            ),
+            isDarkMode = false
         )
     )
 
-    override fun getDisplayName(index: Int): String? {
+    private val previewConfigDark = previewConfigLight.map { config ->
+        config.copy(
+            configName = "${config.configName} - Dark Mode",
+            isDarkMode = true
+        )
+    }
+
+    override val values: Sequence<VisitListPreviewConfig> = previewConfigLight + previewConfigDark
+
+    override fun getDisplayName(index: Int): String {
         return values.elementAt(index).configName
     }
 }
@@ -60,6 +75,7 @@ internal data class VisitListPreviewConfig(
     val mainActivityUiState: MainActivityViewModel.UiState,
     val summaryUiState: SummaryViewModel.UiState,
     val visitListUiState: VisitListViewModel.UiState,
+    val isDarkMode: Boolean
 )
 
 private val previewMainActivityUiState = MainActivityViewModel.UiState(

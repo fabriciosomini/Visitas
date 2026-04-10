@@ -36,9 +36,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.msmobile.visitas.R
+import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.util.borderPadding
 import com.msmobile.visitas.util.horizontalFieldPadding
 import java.time.Instant
@@ -234,7 +234,7 @@ private fun SelectNowButton(onPresetSelected: (LocalDateTime) -> Unit) {
 @VisibleForTesting
 @Preview
 @Composable
-internal fun DateTimePickerPreview(@PreviewParameter(PreviewConfigProvider::class) config: PreviewConfig) {
+internal fun DateTimePickerPreview(@PreviewParameter(DateTimePickerPreviewConfigProvider::class) config: DateTimePickerPreviewConfig) {
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = null
     )
@@ -244,23 +244,13 @@ internal fun DateTimePickerPreview(@PreviewParameter(PreviewConfigProvider::clas
         is24Hour = true
     )
 
-    DateTimePickerContent(
-        selectedTabIndex = config.selectedTabIndex,
-        datePickerState = datePickerState,
-        timePickerState = timePickerState,
-        onTabSelected = {},
-    )
+    VisitasTheme(config.isDarkMode) {
+        DateTimePickerContent(
+            selectedTabIndex = config.selectedTabIndex,
+            datePickerState = datePickerState,
+            timePickerState = timePickerState,
+            onTabSelected = {},
+        )
+    }
 }
 
-@VisibleForTesting
-internal class PreviewConfigProvider : PreviewParameterProvider<PreviewConfig> {
-    override val values: Sequence<PreviewConfig> = sequenceOf(
-        PreviewConfig(selectedTabIndex = 0),
-        PreviewConfig(selectedTabIndex = 1)
-    )
-}
-
-@VisibleForTesting
-internal data class PreviewConfig(
-    val selectedTabIndex: Int
-)
