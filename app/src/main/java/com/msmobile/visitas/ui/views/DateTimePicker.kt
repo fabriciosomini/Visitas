@@ -236,12 +236,12 @@ private fun SelectNowButton(onPresetSelected: (LocalDateTime) -> Unit) {
 @Composable
 internal fun DateTimePickerPreview(@PreviewParameter(DateTimePickerPreviewConfigProvider::class) config: DateTimePickerPreviewConfig) {
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = null
+        initialSelectedDateMillis = config.initialSelectedDateMillis
     )
     val timePickerState = rememberTimePickerState(
-        initialHour = 10,
-        initialMinute = 12,
-        is24Hour = true
+        initialHour = config.initialHour,
+        initialMinute = config.initialMinute,
+        is24Hour = config.is24Hour
     )
 
     VisitasTheme(config.isDarkMode) {

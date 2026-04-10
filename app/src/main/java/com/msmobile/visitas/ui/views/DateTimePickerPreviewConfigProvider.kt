@@ -10,12 +10,20 @@ internal class DateTimePickerPreviewConfigProvider : PreviewParameterProvider<Da
         DateTimePickerPreviewConfig(
             configName = "Date Tab",
             selectedTabIndex = 0,
-            isDarkMode = false
+            isDarkMode = false,
+            initialSelectedDateMillis = 1705312800000,
+            initialHour = 10,
+            initialMinute = 12,
+            is24Hour = true,
         ),
         DateTimePickerPreviewConfig(
             configName = "Time Tab",
             selectedTabIndex = 1,
-            isDarkMode = false
+            isDarkMode = false,
+            initialSelectedDateMillis = 1705312800000,
+            initialHour = 10,
+            initialMinute = 12,
+            is24Hour = true
         )
     )
 
@@ -37,6 +45,10 @@ internal class DateTimePickerPreviewConfigProvider : PreviewParameterProvider<Da
 internal data class DateTimePickerPreviewConfig(
     val configName: String,
     val selectedTabIndex: Int,
-    val isDarkMode: Boolean
+    val isDarkMode: Boolean,
+    val initialSelectedDateMillis: Long,
+    val initialHour: Int,
+    val initialMinute: Int,
+    val is24Hour: Boolean,
 )
 
