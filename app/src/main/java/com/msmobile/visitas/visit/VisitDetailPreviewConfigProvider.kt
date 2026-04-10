@@ -1,5 +1,6 @@
 package com.msmobile.visitas.visit
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.msmobile.visitas.MainActivityViewModel
 import com.msmobile.visitas.R
@@ -8,7 +9,8 @@ import com.msmobile.visitas.util.StringResource
 import java.time.LocalDateTime
 import java.util.UUID
 
-class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPreviewConfig> {
+@VisibleForTesting
+internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPreviewConfig> {
     override val values: Sequence<VisitDetailPreviewConfig> = sequenceOf(
         VisitDetailPreviewConfig(
             configName = "New Visit",
@@ -140,7 +142,8 @@ class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPre
     }
 }
 
-data class VisitDetailPreviewConfig(
+@VisibleForTesting
+internal data class VisitDetailPreviewConfig(
     val configName: String,
     val mainActivityUiState: MainActivityViewModel.UiState,
     val householderId: UUID?,

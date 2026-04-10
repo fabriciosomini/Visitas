@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.msmobile.visitas.AppScaffold
@@ -153,9 +154,10 @@ private fun rememberRestoreBackupLauncher(
     }
 }
 
+@VisibleForTesting
 @Preview
 @Composable
-fun BackupScreenPreview() {
+internal fun BackupScreenPreview() {
     VisitasTheme {
         AppScaffold(
             uiState = MainActivityViewModel.UiState(

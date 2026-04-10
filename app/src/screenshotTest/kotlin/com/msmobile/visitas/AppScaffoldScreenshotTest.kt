@@ -8,12 +8,11 @@ import com.msmobile.visitas.util.IntentState
 import com.ramcosta.composedestinations.generated.destinations.VisitListScreenDestination
 
 class AppScaffoldScreenshotTest {
-
     @PreviewTest
     @Preview
     @Composable
-    fun previewAppScaffold() {
-        VisitasTheme(dynamicColor = false) {
+    fun AppScaffoldPreviewTest() {
+        VisitasTheme {
             AppScaffold(
                 uiState = MainActivityViewModel.UiState(
                     scaffoldState = MainActivityViewModel.ScaffoldState(

@@ -1,5 +1,6 @@
 package com.msmobile.visitas.ui.views
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -230,9 +231,10 @@ private fun SelectNowButton(onPresetSelected: (LocalDateTime) -> Unit) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@VisibleForTesting
 @Preview
 @Composable
-private fun DateTimePickerPreview(@PreviewParameter(PreviewConfigProvider::class) config: PreviewConfig) {
+internal fun DateTimePickerPreview(@PreviewParameter(PreviewConfigProvider::class) config: PreviewConfig) {
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = null
     )
@@ -250,13 +252,15 @@ private fun DateTimePickerPreview(@PreviewParameter(PreviewConfigProvider::class
     )
 }
 
-private class PreviewConfigProvider : PreviewParameterProvider<PreviewConfig> {
+@VisibleForTesting
+internal class PreviewConfigProvider : PreviewParameterProvider<PreviewConfig> {
     override val values: Sequence<PreviewConfig> = sequenceOf(
         PreviewConfig(selectedTabIndex = 0),
         PreviewConfig(selectedTabIndex = 1)
     )
 }
 
-private data class PreviewConfig(
+@VisibleForTesting
+internal data class PreviewConfig(
     val selectedTabIndex: Int
 )

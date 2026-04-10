@@ -1,5 +1,6 @@
 package com.msmobile.visitas.conversation
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -350,9 +351,10 @@ private fun StateHandler(
     }
 }
 
+@VisibleForTesting
 @Preview
 @Composable
-private fun ConversationDetailScreenPreview(
+internal fun ConversationDetailScreenPreview(
     @PreviewParameter(ConversationDetailPreviewConfigProvider::class) config: ConversationDetailPreviewConfig
 ) {
     VisitasTheme {

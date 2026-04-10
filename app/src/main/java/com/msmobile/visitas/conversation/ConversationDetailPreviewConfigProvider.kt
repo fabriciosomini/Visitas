@@ -1,12 +1,14 @@
 package com.msmobile.visitas.conversation
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.msmobile.visitas.MainActivityViewModel
 import com.msmobile.visitas.conversation.ConversationDetailViewModel.ConversationState
 import com.msmobile.visitas.util.IntentState
 import java.util.UUID
 
-class ConversationDetailPreviewConfigProvider : PreviewParameterProvider<ConversationDetailPreviewConfig> {
+@VisibleForTesting
+internal class ConversationDetailPreviewConfigProvider : PreviewParameterProvider<ConversationDetailPreviewConfig> {
     override val values: Sequence<ConversationDetailPreviewConfig> = sequenceOf(
         ConversationDetailPreviewConfig(
             configName = "With Delete Button",
@@ -57,7 +59,8 @@ class ConversationDetailPreviewConfigProvider : PreviewParameterProvider<Convers
     }
 }
 
-data class ConversationDetailPreviewConfig(
+@VisibleForTesting
+internal data class ConversationDetailPreviewConfig(
     val configName: String,
     val mainActivityUiState: MainActivityViewModel.UiState,
     val showDeleteButton: Boolean,

@@ -1,5 +1,6 @@
 package com.msmobile.visitas.ui.views
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Restore
 import androidx.compose.material3.AlertDialog
@@ -45,9 +46,10 @@ fun RestoreBackupDialog(
     )
 }
 
+@VisibleForTesting
 @Preview
 @Composable
-private fun RestoreBackupDialogPreview() {
+internal fun RestoreBackupDialogPreview() {
     RestoreBackupDialog(
         onConfirm = {},
         onDismiss = {}

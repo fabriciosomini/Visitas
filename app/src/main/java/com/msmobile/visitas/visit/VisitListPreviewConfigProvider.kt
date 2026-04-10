@@ -1,5 +1,6 @@
 package com.msmobile.visitas.visit
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.msmobile.visitas.MainActivityViewModel
 import com.msmobile.visitas.summary.SummaryViewModel
@@ -8,7 +9,8 @@ import com.msmobile.visitas.util.IntentState
 import java.time.LocalDateTime
 import java.util.UUID
 
-class VisitListPreviewConfigProvider : PreviewParameterProvider<VisitListPreviewConfig> {
+@VisibleForTesting
+internal class VisitListPreviewConfigProvider : PreviewParameterProvider<VisitListPreviewConfig> {
     override val values: Sequence<VisitListPreviewConfig> = sequenceOf(
         VisitListPreviewConfig(
             configName = "Summary details collapsed",
@@ -52,7 +54,8 @@ class VisitListPreviewConfigProvider : PreviewParameterProvider<VisitListPreview
     }
 }
 
-data class VisitListPreviewConfig(
+@VisibleForTesting
+internal data class VisitListPreviewConfig(
     val configName: String,
     val mainActivityUiState: MainActivityViewModel.UiState,
     val summaryUiState: SummaryViewModel.UiState,
