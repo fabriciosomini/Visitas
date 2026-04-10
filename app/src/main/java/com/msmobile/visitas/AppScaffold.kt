@@ -1,5 +1,6 @@
 package com.msmobile.visitas
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,10 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.ui.views.BottomNavigation
-import com.msmobile.visitas.util.IntentState
-import com.ramcosta.composedestinations.generated.destinations.VisitListScreenDestination
 import com.ramcosta.composedestinations.spec.DestinationSpec
 import com.ramcosta.composedestinations.spec.Direction
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
@@ -78,23 +78,19 @@ private fun StateHandler(
     }
 }
 
+@VisibleForTesting
 @Composable
 @Preview
-private fun PreviewAppScaffold() {
-    AppScaffold(
-        uiState = MainActivityViewModel.UiState(
-            scaffoldState = MainActivityViewModel.ScaffoldState(
-                showBottomBar = true,
-                showFAB = true
-            ),
-            eventState = MainActivityViewModel.UiEventState.Idle,
-            intentState = IntentState.None
-        ),
-        currentDestination = VisitListScreenDestination,
-        onEvent = {},
-        onNavigateToTab = {},
-        onNavigate = {}
-    ) {
-
+internal fun AppScaffoldPreview(
+    @PreviewParameter(AppScaffoldPreviewConfigProvider::class) config: AppScaffoldPreviewConfig
+) {
+    VisitasTheme(config.isDarkMode) {
+        AppScaffold(
+            uiState = config.uiState,
+            currentDestination = config.currentDestination,
+            onEvent = {},
+            onNavigateToTab = {},
+            onNavigate = {}
+        ) {}
     }
 }
