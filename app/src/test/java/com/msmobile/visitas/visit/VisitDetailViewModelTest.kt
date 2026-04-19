@@ -505,6 +505,134 @@ class VisitDetailViewModelTest {
         assertTrue(copiedText.contains("Morning"))
     }
 
+    @Test
+    fun `onEvent with PreferredDayChanged sets hasVisitTimeError on pending visits when invalid`() {
+        // Arrange
+        val viewModel = createViewModel(visitTimeValidResult = false)
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.PreferredDayChanged(VisitPreferredDay.MONDAY))
+
+        // Assert
+        assertTrue(viewModel.uiState.value.visitList.first().hasVisitTimeError)
+    }
+
+    @Test
+    fun `onEvent with PreferredDayChanged clears hasVisitTimeError on pending visits when valid`() {
+        // Arrange
+        val viewModel = createViewModel(visitTimeValidResult = true)
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.PreferredDayChanged(VisitPreferredDay.MONDAY))
+
+        // Assert
+        assertFalse(viewModel.uiState.value.visitList.first().hasVisitTimeError)
+    }
+
+    @Test
+    fun `onEvent with PreferredTimeChanged sets hasVisitTimeError on pending visits when invalid`() {
+        // Arrange
+        val viewModel = createViewModel(visitTimeValidResult = false)
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.PreferredTimeChanged(VisitPreferredTime.MORNING))
+
+        // Assert
+        assertTrue(viewModel.uiState.value.visitList.first().hasVisitTimeError)
+    }
+
+    @Test
+    fun `onEvent with PreferredTimeChanged clears hasVisitTimeError on pending visits when valid`() {
+        // Arrange
+        val viewModel = createViewModel(visitTimeValidResult = true)
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.PreferredTimeChanged(VisitPreferredTime.MORNING))
+
+        // Assert
+        assertFalse(viewModel.uiState.value.visitList.first().hasVisitTimeError)
+    }
+
+    @Test
+    fun `onEvent with VisitDateAccepted sets hasVisitTimeError when invalid`() {
+        // Arrange
+        val viewModel = createViewModel(visitTimeValidResult = false)
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
+        val visit = viewModel.uiState.value.visitList.first()
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.VisitDateAccepted(visit, TEST_DATE_TIME.plusDays(1)))
+
+        // Assert
+        assertTrue(viewModel.uiState.value.visitList.first().hasVisitTimeError)
+    }
+
+    @Test
+    fun `onEvent with VisitDateAccepted clears hasVisitTimeError when valid`() {
+        // Arrange
+        val viewModel = createViewModel(visitTimeValidResult = true)
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
+        val visit = viewModel.uiState.value.visitList.first()
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.VisitDateAccepted(visit, TEST_DATE_TIME.plusDays(1)))
+
+        // Assert
+        assertFalse(viewModel.uiState.value.visitList.first().hasVisitTimeError)
+    }
+
+    @Test
+    fun `onEvent with VisitDoneChanged to true clears hasVisitTimeError`() {
+        // Arrange - trigger a validation error first
+        val viewModel = createViewModel(visitTimeValidResult = false)
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.PreferredDayChanged(VisitPreferredDay.MONDAY))
+        val visit = viewModel.uiState.value.visitList.first()
+        assertTrue(visit.hasVisitTimeError)
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.VisitDoneChanged(visit, true))
+
+        // Assert
+        assertFalse(viewModel.uiState.value.visitList.first().hasVisitTimeError)
+    }
+
+    @Test
+    fun `onEvent with VisitDoneChanged to false preserves hasVisitTimeError when error already present`() {
+        // Arrange - trigger a validation error on a pending (not-done) visit
+        val viewModel = createViewModel(visitTimeValidResult = false)
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.PreferredDayChanged(VisitPreferredDay.MONDAY))
+        val visit = viewModel.uiState.value.visitList.first()
+        assertTrue(visit.hasVisitTimeError)
+        assertFalse(visit.isDone)
+
+        // Act - re-dispatch not-done on a visit that already has an error
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.VisitDoneChanged(visit, false))
+
+        // Assert
+        assertTrue(viewModel.uiState.value.visitList.first().hasVisitTimeError)
+    }
+
+    @Test
+    fun `revalidatePendingVisits does not set hasVisitTimeError on done visits`() {
+        // Arrange - mark the visit as done first, then trigger revalidation with invalid result
+        val viewModel = createViewModel(visitTimeValidResult = false)
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
+        val visit = viewModel.uiState.value.visitList.first()
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.VisitDoneChanged(visit, true))
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.PreferredDayChanged(VisitPreferredDay.MONDAY))
+
+        // Assert - done visit should never have a time error
+        assertFalse(viewModel.uiState.value.visitList.first().hasVisitTimeError)
+    }
+
     private fun createViewModel(
         conversationRepositoryRef: MockReferenceHolder<ConversationRepository>? = null,
         householderRepositoryRef: MockReferenceHolder<HouseholderRepository>? = null,
@@ -513,7 +641,8 @@ class VisitDetailViewModelTest {
         householderLatitude: Double? = null,
         householderLongitude: Double? = null,
         householderPreferredDay: VisitPreferredDay = VisitPreferredDay.ANY,
-        householderPreferredTime: VisitPreferredTime = VisitPreferredTime.ANY
+        householderPreferredTime: VisitPreferredTime = VisitPreferredTime.ANY,
+        visitTimeValidResult: Boolean = true
     ): VisitDetailViewModel {
         val dispatchers = DispatcherProvider(
             io = mainDispatcherRule.dispatcher
@@ -549,7 +678,7 @@ class VisitDetailViewModelTest {
             on { hasCalendarPermission() } doReturn false
         }
         val visitTimeValidator = mock<VisitTimeValidator> {
-            on { isValidVisitTime(any(), any(), any()) } doReturn true
+            on { isValidVisitTime(any(), any(), any()) } doReturn visitTimeValidResult
         }
         val dateTimeProvider = mock<DateTimeProvider> {
             on { nowLocalDateTime() } doReturn TEST_DATE_TIME
