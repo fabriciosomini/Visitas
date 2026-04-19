@@ -594,7 +594,14 @@ class VisitDetailViewModel
     private fun visitDoneChanged(value: Boolean, visit: VisitState) {
         newState {
             val updatedList = visitList.toMutableList().apply {
-                set(this@apply.indexOfById(visit), visit.copy(isDone = value))
+                val hasVisitTimeError = !value && visit.hasVisitTimeError
+                set(
+                    this@apply.indexOfById(visit),
+                    visit.copy(
+                        isDone = value,
+                        hasVisitTimeError = hasVisitTimeError
+                    )
+                )
             }
             copy(
                 visitList = updatedList,
@@ -606,8 +613,11 @@ class VisitDetailViewModel
     private fun visitDateAccepted(visit: VisitState, dateTime: LocalDateTime) {
         newState {
             val updatedList = visitList.toMutableList().apply {
-                set(this@apply.indexOfById(visit), visit.copy(date = dateTime))
-            }
+                set(
+                    this@apply.indexOfById(visit),
+                    visit.copy(date = dateTime)
+                )
+            }.revalidatePendingVisits(householder)
             copy(
                 visitList = updatedList,
                 eventState = UiEventState.Idle
@@ -738,32 +748,6 @@ class VisitDetailViewModel
     }
 
     private fun saveClicked() {
-        // Validate visit times before saving
-        val householder = _uiState.value.householder
-        val visitListWithValidation = _uiState.value.visitList.map { visit ->
-            if (visit.wasRemoved || visit.isDone) {
-                visit.copy(hasVisitTimeError = false)
-            } else {
-                val isValid = visitTimeValidator.isValidVisitTime(
-                    visit.date,
-                    householder.preferredDay,
-                    householder.preferredTime
-                )
-                visit.copy(hasVisitTimeError = !isValid)
-            }
-        }
-
-        val hasValidationErrors = visitListWithValidation.any { it.hasVisitTimeError }
-        if (hasValidationErrors) {
-            newState {
-                copy(
-                    visitList = visitListWithValidation,
-                    eventState = UiEventState.ValidationError
-                )
-            }
-            return
-        }
-
         // Check if there are pending visits that need calendar integration
         val hasPendingVisits = _uiState.value.visitList.any { !it.isDone && !it.wasRemoved }
 
@@ -909,8 +893,10 @@ class VisitDetailViewModel
 
     private fun preferredDayChanged(value: VisitPreferredDay) {
         newState {
+            val updatedHouseholder = householder.copy(preferredDay = value)
             copy(
-                householder = householder.copy(preferredDay = value),
+                householder = updatedHouseholder,
+                visitList = visitList.revalidatePendingVisits(updatedHouseholder),
                 eventState = UiEventState.Idle
             )
         }
@@ -918,10 +904,27 @@ class VisitDetailViewModel
 
     private fun preferredTimeChanged(value: VisitPreferredTime) {
         newState {
+            val updatedHouseholder = householder.copy(preferredTime = value)
             copy(
-                householder = householder.copy(preferredTime = value),
+                householder = updatedHouseholder,
+                visitList = visitList.revalidatePendingVisits(updatedHouseholder),
                 eventState = UiEventState.Idle
             )
+        }
+    }
+
+    private fun List<VisitState>.revalidatePendingVisits(householder: HouseholderState): List<VisitState> {
+        return map { visit ->
+            if (visit.wasRemoved || visit.isDone) {
+                return@map visit.copy(hasVisitTimeError = false)
+            }
+
+            val isValid = visitTimeValidator.isValidVisitTime(
+                visit.date,
+                householder.preferredDay,
+                householder.preferredTime
+            )
+            visit.copy(hasVisitTimeError = !isValid)
         }
     }
 
