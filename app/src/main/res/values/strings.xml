@@ -70,6 +70,7 @@
     <string name="visit_distance">Distance</string>
     <string name="nearby_visits">Nearby visits</string>
     <string name="nearby_visit">(Nearby)</string>
+    <string name="draft_visit">Draft</string>
     <string name="colon">: </string>
     <string name="create_backup">Create backup</string>
     <string name="restore_backup">Restore backup</string>

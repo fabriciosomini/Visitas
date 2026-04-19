@@ -590,6 +590,7 @@ fun VisitCardSkeleton() {
             householderAddress = householderAddress,
             date = LocalDateTime.now(),
             isDone = false,
+            isDraft = false,
             hasToBeRescheduled = false,
             isPendingVisitMenuExpanded = false,
             subjectPreview = subjectPreview,
@@ -720,6 +721,15 @@ private fun VisitCard(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (visit.isDraft) {
+                        Text(
+                            text = stringResource(id = R.string.draft_visit),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                        VerticalDivider(color = Color.Transparent, thickness = horizontalFieldPadding)
+                    }
                     if (showNearbyVisits && isHouseholderAddressNearby) {
                         Text(
                             text = stringResource(id = R.string.nearby_visit),
