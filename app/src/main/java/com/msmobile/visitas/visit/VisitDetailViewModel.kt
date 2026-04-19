@@ -535,7 +535,9 @@ class VisitDetailViewModel
                 visitType = nextVisitType,
                 date = nextVisitDate
             )
-            val updatedVisitList = listOf(nextVisit).plus(visitList)
+            val updatedVisitList = listOf(nextVisit)
+                .plus(visitList)
+                .revalidatePendingVisits(householder)
             copy(
                 visitList = updatedVisitList,
                 eventState = UiEventState.Idle
