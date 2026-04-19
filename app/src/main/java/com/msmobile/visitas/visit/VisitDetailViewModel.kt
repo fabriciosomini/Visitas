@@ -594,15 +594,13 @@ class VisitDetailViewModel
     private fun visitDoneChanged(value: Boolean, visit: VisitState) {
         newState {
             val updatedList = visitList.toMutableList().apply {
-                val hasVisitTimeError = !value && visit.hasVisitTimeError
                 set(
                     this@apply.indexOfById(visit),
                     visit.copy(
-                        isDone = value,
-                        hasVisitTimeError = hasVisitTimeError
+                        isDone = value
                     )
                 )
-            }
+            }.revalidatePendingVisits(householder)
             copy(
                 visitList = updatedList,
                 eventState = UiEventState.Idle
