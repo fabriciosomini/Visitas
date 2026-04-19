@@ -998,7 +998,9 @@ class VisitDetailViewModel
                         conversation.id == visit.nextConversationId
                     }
                     visit.asState(conversation)
-                }.reindexIfNeeded()
+                }
+                    .reindexIfNeeded()
+                    .revalidatePendingVisits(householder)
                 newState {
                     copy(
                         householder = householder,
