@@ -69,7 +69,7 @@
     <string name="placeholder_very_long_string">123456789 123456789 123456789</string>
     <string name="visit_distance">Distance</string>
     <string name="nearby_visits">Nearby visits</string>
-    <string name="nearby_visit">(Nearby)</string>
+    <string name="nearby_visit">(Nearby)</string>\n    <string name="draft_visit">Draft</string>
     <string name="colon">: </string>
     <string name="create_backup">Create backup</string>
     <string name="restore_backup">Restore backup</string>

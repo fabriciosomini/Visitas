@@ -1065,6 +1065,7 @@ class VisitDetailViewModel
             subject = subject,
             date = date,
             isDone = isDone,
+            isDraft = isDraft,
             householderId = householderId,
             canBeRemoved = isAllowedRemoveVisit(orderIndex),
             orderIndex = orderIndex,
@@ -1155,7 +1156,8 @@ class VisitDetailViewModel
             orderIndex = orderIndex,
             visitType = visitType.type,
             nextConversationId = nextConversationSuggestion?.id,
-            calendarEventId = calendarEventId
+            calendarEventId = calendarEventId,
+            isDraft = isDraft
         )
     }
 
@@ -1237,6 +1239,7 @@ class VisitDetailViewModel
         val subject: String,
         val date: LocalDateTime,
         val isDone: Boolean,
+        val isDraft: Boolean = false,
         val householderId: UUID?,
         val canBeRemoved: Boolean,
         val orderIndex: Int,
