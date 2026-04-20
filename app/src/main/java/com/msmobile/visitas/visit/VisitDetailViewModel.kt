@@ -963,7 +963,7 @@ class VisitDetailViewModel
             notes = null,
             showClearName = false,
             showExpandNotes = false,
-            isNotesExpanded = true,
+            isNotesExpanded = false,
             addressState = HouseholderAddressState.LoadLocation,
             showClearNotes = false,
             isLoadingAddress = false
