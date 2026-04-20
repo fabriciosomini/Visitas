@@ -728,8 +728,7 @@ private fun VisitCard(
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.error.copy(alpha = 0.75f)
                         )
-                    }
-                    else if (showNearbyVisits && isHouseholderAddressNearby) {
+                    } else if (showNearbyVisits && isHouseholderAddressNearby) {
                         Text(
                             text = stringResource(id = R.string.nearby_visit),
                             style = MaterialTheme.typography.bodyMedium,
