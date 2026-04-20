@@ -29,7 +29,9 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                     showClearName = false,
                     addressState = VisitDetailViewModel.HouseholderAddressState.LoadLocation,
                     showClearNotes = false,
-                    isLoadingAddress = false
+                    isLoadingAddress = false,
+                    showExpandNotes = false,
+                    isNotesExpanded = false,
                 ),
                 visitList = listOf(
                     VisitDetailViewModel.VisitState(
@@ -145,6 +147,21 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             ),
             isDarkMode = false
         ),
+        VisitDetailPreviewConfig(
+            configName = "Notes Expanded",
+            mainActivityUiState = previewMainActivityUiState,
+            householderId = UUID.randomUUID(),
+            uiState = previewVisitDetailUiState.copy(
+                householder = previewVisitDetailUiState.householder.copy(
+                    notes = "Morador receptivo, prefere visitas pela manhã. Tem interesse em estudar a Bíblia.",
+                    showClearNotes = false,
+                    showExpandNotes = true,
+                    isNotesExpanded = true
+                ),
+                visitList = listOf(previewVisitUiState.copy(canBeRemoved = false))
+            ),
+            isDarkMode = false
+        ),
     )
 
     private val previewConfigDark = previewConfigLight.map { config ->
@@ -212,7 +229,9 @@ private val previewVisitDetailUiState = VisitDetailViewModel.UiState(
         showClearName = true,
         addressState = VisitDetailViewModel.HouseholderAddressState.LoadLocation,
         showClearNotes = false,
-        isLoadingAddress = false
+        isLoadingAddress = false,
+        showExpandNotes = true,
+        isNotesExpanded = true,
     ),
     visitList = listOf(previewVisitUiState),
     conversationList = listOf(),

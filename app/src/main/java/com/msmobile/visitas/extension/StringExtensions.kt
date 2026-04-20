@@ -36,3 +36,7 @@ fun String.split(
     val list = split(*delimiters).toMutableList().apply(transformer)
     return list
 }
+
+fun String.hasMultipleLines(): Boolean {
+    return this.lines().size > 1
+}

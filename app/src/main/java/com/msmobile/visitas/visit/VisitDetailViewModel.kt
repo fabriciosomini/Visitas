@@ -6,6 +6,7 @@ import com.msmobile.visitas.R
 import com.msmobile.visitas.conversation.Conversation
 import com.msmobile.visitas.conversation.ConversationRepository
 import com.msmobile.visitas.extension.containsAllWords
+import com.msmobile.visitas.extension.hasMultipleLines
 import com.msmobile.visitas.extension.split
 import com.msmobile.visitas.extension.subListInclusive
 import com.msmobile.visitas.householder.Householder
@@ -128,6 +129,7 @@ class VisitDetailViewModel
             UiEvent.ClearNameClicked -> clearNameClicked()
             UiEvent.ClearAddressClicked -> clearAddressClicked()
             UiEvent.ClearNotesClicked -> clearNotesClicked()
+            UiEvent.ExpandNotesClicked -> expandNotesClicked()
             UiEvent.SnackbarDismissed -> snackbarDismissed()
             UiEvent.LocationRationaleAccepted -> handleLocationRationaleAccepted()
             UiEvent.LocationRationaleDismissed -> handleLocationRationaleDismissed()
@@ -382,8 +384,12 @@ class VisitDetailViewModel
     private fun notesFocusChanged(hasFocus: Boolean) {
         newState {
             val showClearNotes = hasFocus && householder.notes?.isNotEmpty() == true
+            val showExpandNotes = !showClearNotes && householder.notes?.hasMultipleLines() == true
             copy(
-                householder = householder.copy(showClearNotes = showClearNotes),
+                householder = householder.copy(
+                    showClearNotes = showClearNotes,
+                    showExpandNotes = showExpandNotes
+                ),
                 eventState = UiEventState.Idle
             )
         }
@@ -430,6 +436,12 @@ class VisitDetailViewModel
 
     private fun clearNotesClicked() {
         notesChanged("")
+    }
+
+    private fun expandNotesClicked() {
+        newState {
+            copy(householder = householder.copy(isNotesExpanded = !householder.isNotesExpanded))
+        }
     }
 
     private fun clearSubjectClicked(visit: VisitState) {
@@ -884,8 +896,13 @@ class VisitDetailViewModel
     private fun notesChanged(value: String) {
         newState {
             val showClearNotes = value.isNotEmpty()
+            val showExpandNotes = false // field is focused while typing; expand shows on blur
             copy(
-                householder = householder.copy(notes = value, showClearNotes = showClearNotes),
+                householder = householder.copy(
+                    notes = value,
+                    showClearNotes = showClearNotes,
+                    showExpandNotes = showExpandNotes
+                ),
                 eventState = UiEventState.Idle
             )
         }
@@ -945,6 +962,8 @@ class VisitDetailViewModel
             address = "",
             notes = null,
             showClearName = false,
+            showExpandNotes = false,
+            isNotesExpanded = true,
             addressState = HouseholderAddressState.LoadLocation,
             showClearNotes = false,
             isLoadingAddress = false
@@ -1108,6 +1127,8 @@ class VisitDetailViewModel
                 showClearName = false,
                 addressState = addressState,
                 showClearNotes = false,
+                showExpandNotes = notes?.hasMultipleLines() == true,
+                isNotesExpanded = false, // Notes collapsed by default; user can expand if needed
                 isLoadingAddress = false,
                 addressLatitude = addressLatitude,
                 addressLongitude = addressLongitude,
@@ -1282,6 +1303,8 @@ class VisitDetailViewModel
         val addressState: HouseholderAddressState,
         val showClearNotes: Boolean,
         val isLoadingAddress: Boolean,
+        val showExpandNotes: Boolean,
+        val isNotesExpanded: Boolean,
         val addressLatitude: Double? = null,
         val addressLongitude: Double? = null,
         val preferredDay: VisitPreferredDay = VisitPreferredDay.ANY,
@@ -1343,6 +1366,7 @@ class VisitDetailViewModel
         data object ClearNameClicked : UiEvent()
         data object ClearAddressClicked : UiEvent()
         data object ClearNotesClicked : UiEvent()
+        data object ExpandNotesClicked : UiEvent()
         data object SnackbarDismissed : UiEvent()
         data object LocationRationaleAccepted : UiEvent()
         data object LocationRationaleDismissed : UiEvent()

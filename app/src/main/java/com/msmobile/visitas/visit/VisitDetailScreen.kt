@@ -94,6 +94,7 @@ import com.msmobile.visitas.ui.views.DetailFooter
 import com.msmobile.visitas.ui.views.LazyColumnWithScrollbar
 import com.msmobile.visitas.ui.views.PermissionRationaleSheet
 import com.msmobile.visitas.ui.views.TextFieldClearButton
+import com.msmobile.visitas.ui.views.TextFieldExpandButton
 import com.msmobile.visitas.util.DetailScreenStyle
 import com.msmobile.visitas.util.borderPadding
 import com.msmobile.visitas.util.horizontalFieldPadding
@@ -358,12 +359,20 @@ private fun HouseholderDetail(
             TextFieldClearButton(show = householder.showClearNotes, onClear = {
                 onEvent(VisitDetailViewModel.UiEvent.ClearNotesClicked)
             })
+            TextFieldExpandButton(
+                show = householder.showExpandNotes,
+                isExpanded = householder.isNotesExpanded,
+                onExpand = {
+                    onEvent(VisitDetailViewModel.UiEvent.ExpandNotesClicked)
+                }
+            )
         },
         label = {
             Text(text = stringResource(id = R.string.householder_notes))
         },
         colors = EditableTextFieldColors,
         shape = MaterialTheme.shapes.textField.removeTopCorner(),
+        singleLine = !householder.isNotesExpanded,
         onValueChange = { value ->
             onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged(value))
         }
