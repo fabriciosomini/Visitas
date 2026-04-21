@@ -246,7 +246,7 @@ private val previewReturnVisit = VisitDetailViewModel.VisitState(
     visitType = VisitDetailViewModel.VisitTypeState(
         type = VisitType.RETURN_VISIT,
         description = StringResource(
-            textResId = R.string.first_visit,
+            textResId = R.string.return_visit,
             arguments = listOf()
         )
     ),
