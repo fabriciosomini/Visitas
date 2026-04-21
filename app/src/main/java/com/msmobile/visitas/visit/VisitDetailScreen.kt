@@ -350,6 +350,12 @@ private fun HouseholderDetail(
     HorizontalDivider()
     val textStyle = LocalTextStyle.current
     val textMeasurer = rememberTextMeasurer()
+    var notesTextValue by remember { mutableStateOf(TextFieldValue(householder.notes ?: "")) }
+    LaunchedEffect(householder.notes) {
+        if (notesTextValue.text != (householder.notes ?: "")) {
+            notesTextValue = TextFieldValue(householder.notes ?: "")
+        }
+    }
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
         val notesHasOverflow = remember(householder.notes, constraints.maxWidth) {
             if (householder.notes.isNullOrEmpty()) false
@@ -368,9 +374,12 @@ private fun HouseholderDetail(
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged { focusState ->
+                    if (!focusState.hasFocus) {
+                        notesTextValue = notesTextValue.copy(selection = TextRange(0))
+                    }
                     onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(focusState.hasFocus))
                 },
-            value = householder.notes ?: "",
+            value = notesTextValue,
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 autoCorrectEnabled = true
@@ -394,7 +403,8 @@ private fun HouseholderDetail(
             shape = MaterialTheme.shapes.textField.removeTopCorner(),
             singleLine = !householder.isNotesExpanded,
             onValueChange = { value ->
-                onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged(value))
+                notesTextValue = value
+                onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged(value.text))
             }
         )
     }
