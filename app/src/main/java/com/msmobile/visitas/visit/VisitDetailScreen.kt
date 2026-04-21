@@ -63,6 +63,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.annotation.VisibleForTesting
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
@@ -347,15 +348,15 @@ private fun HouseholderDetail(
         onEvent = onEvent
     )
     HorizontalDivider()
+    val textStyle = LocalTextStyle.current
     val textMeasurer = rememberTextMeasurer()
-    val bodyLargeStyle = MaterialTheme.typography.bodyLarge
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
         val notesHasOverflow = remember(householder.notes, constraints.maxWidth) {
             if (householder.notes.isNullOrEmpty()) false
             else {
                 val result = textMeasurer.measure(
                     text = householder.notes,
-                    style = bodyLargeStyle,
+                    style = textStyle,
                     constraints = constraints,
                     maxLines = 1,
                     overflow = TextOverflow.Clip
