@@ -111,6 +111,21 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             isDarkMode = false
         ),
         VisitDetailPreviewConfig(
+            configName = "Notes Focused",
+            mainActivityUiState = previewMainActivityUiState,
+            householderId = UUID.randomUUID(),
+            uiState = previewVisitDetailUiState.copy(
+                householder = previewVisitDetailUiState.householder.copy(
+                    notes = "Morador receptivo, prefere visitas pela manhã.\nTem interesse em estudar a Bíblia.",
+                    showClearNotes = true,
+                    showExpandNotes = false,
+                    isNotesExpanded = true
+                ),
+                visitList = listOf(previewFirstVisitUiState.copy(canBeRemoved = false))
+            ),
+            isDarkMode = false
+        ),
+        VisitDetailPreviewConfig(
             configName = "Notes Expanded",
             mainActivityUiState = previewMainActivityUiState,
             householderId = UUID.randomUUID(),
@@ -135,21 +150,6 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                     showClearNotes = false,
                     showExpandNotes = true,
                     isNotesExpanded = false
-                ),
-                visitList = listOf(previewFirstVisitUiState.copy(canBeRemoved = false))
-            ),
-            isDarkMode = false
-        ),
-        VisitDetailPreviewConfig(
-            configName = "Notes Expanded + Focus",
-            mainActivityUiState = previewMainActivityUiState,
-            householderId = UUID.randomUUID(),
-            uiState = previewVisitDetailUiState.copy(
-                householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Morador receptivo, prefere visitas pela manhã.\nTem interesse em estudar a Bíblia.",
-                    showClearNotes = true,
-                    showExpandNotes = false,
-                    isNotesExpanded = true
                 ),
                 visitList = listOf(previewFirstVisitUiState.copy(canBeRemoved = false))
             ),
