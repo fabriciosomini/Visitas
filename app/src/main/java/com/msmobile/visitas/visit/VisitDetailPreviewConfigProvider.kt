@@ -34,29 +34,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                     isNotesExpanded = false,
                 ),
                 visitList = listOf(
-                    VisitDetailViewModel.VisitState(
-                        id = UUID.randomUUID(),
-                        subject = "",
-                        date = previewDate1,
-                        isDone = false,
-                        householderId = UUID.randomUUID(),
-                        canBeRemoved = false,
-                        orderIndex = 0,
-                        isConversationListExpanded = false,
-                        isVisitTypeListExpanded = false,
-                        visitType = VisitDetailViewModel.VisitTypeState(
-                            type = VisitType.FIRST_VISIT,
-                            description = StringResource(
-                                textResId = R.string.first_visit,
-                                arguments = listOf()
-                            )
-                        ),
-                        nextConversationSuggestion = null,
-                        showNextVisitSuggestion = false,
-                        showClearSubject = false,
-                        wasRemoved = false,
-                        caretPosition = 0
-                    )
+                    previewNewVisitUiState
                 )
             ),
             isDarkMode = false
@@ -67,7 +45,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 visitList = listOf(
-                    previewVisitUiState.copy(canBeRemoved = false)
+                    previewFirstVisitUiState.copy(canBeRemoved = false)
                 )
             ),
             isDarkMode = false
@@ -90,13 +68,8 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = null,
             uiState = previewVisitDetailUiState.copy(
                 visitList = listOf(
-                    previewVisitUiState,
-                    previewVisitUiState.copy(
-                        id = UUID.randomUUID(),
-                        subject = "Como podemos ter certeza de que há um Criador?",
-                        isDone = false,
-                        canBeRemoved = true
-                    )
+                    previewReturnVisit,
+                    previewFirstVisitUiState
                 )
             ),
             isDarkMode = false
@@ -107,15 +80,12 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = null,
             uiState = previewVisitDetailUiState.copy(
                 visitList = listOf(
-                    previewVisitUiState.copy(
+                    previewFirstVisitUiState.copy(
+                        isDone = true,
+                        canBeRemoved = false,
+                        nextConversationSuggestion = previewConversationSuggestion,
                         showNextVisitSuggestion = true
-                    ),
-                    previewVisitUiState.copy(
-                        id = UUID.randomUUID(),
-                        subject = "Como podemos ter certeza de que há um Criador?",
-                        isDone = false,
-                        canBeRemoved = true
-                    )
+                    ).copy(),
                 )
             ),
             isDarkMode = false
@@ -130,17 +100,10 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                     preferredTime = VisitPreferredTime.AFTERNOON
                 ),
                 visitList = listOf(
-                    previewVisitUiState.copy(
+                    previewFirstVisitUiState.copy(
                         isDone = false,
                         canBeRemoved = false,
                         hasVisitTimeError = true
-                    ),
-                    previewVisitUiState.copy(
-                        id = UUID.randomUUID(),
-                        subject = "Como podemos ter certeza de que há um Criador?",
-                        isDone = false,
-                        canBeRemoved = true,
-                        hasVisitTimeError = false
                     )
                 ),
                 eventState = VisitDetailViewModel.UiEventState.ValidationError
@@ -158,7 +121,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                     showExpandNotes = true,
                     isNotesExpanded = true
                 ),
-                visitList = listOf(previewVisitUiState.copy(canBeRemoved = false))
+                visitList = listOf(previewFirstVisitUiState.copy(canBeRemoved = false))
             ),
             isDarkMode = false
         ),
@@ -173,7 +136,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                     showExpandNotes = true,
                     isNotesExpanded = false
                 ),
-                visitList = listOf(previewVisitUiState.copy(canBeRemoved = false))
+                visitList = listOf(previewFirstVisitUiState.copy(canBeRemoved = false))
             ),
             isDarkMode = false
         ),
@@ -211,10 +174,34 @@ private val previewMainActivityUiState = MainActivityViewModel.UiState(
     intentState = IntentState.None
 )
 
-private val previewVisitUiState = VisitDetailViewModel.VisitState(
+private val previewNewVisitUiState = VisitDetailViewModel.VisitState(
+    id = UUID.randomUUID(),
+    subject = "",
+    date = previewDate1,
+    isDone = false,
+    householderId = UUID.randomUUID(),
+    canBeRemoved = false,
+    orderIndex = 0,
+    isConversationListExpanded = false,
+    isVisitTypeListExpanded = false,
+    visitType =  VisitDetailViewModel.VisitTypeState(
+        type = VisitType.FIRST_VISIT,
+        description = StringResource(
+            textResId = R.string.first_visit,
+            arguments = listOf()
+        )
+    ),
+    nextConversationSuggestion = null,
+    showNextVisitSuggestion = false,
+    showClearSubject = false,
+    wasRemoved = false,
+    caretPosition = 0
+)
+
+private val previewFirstVisitUiState = VisitDetailViewModel.VisitState(
     id = UUID.randomUUID(),
     subject = "O que é o Reino de Deus?",
-    date = previewDate2,
+    date = previewDate1,
     isDone = true,
     householderId = UUID.randomUUID(),
     canBeRemoved = true,
@@ -235,6 +222,39 @@ private val previewVisitUiState = VisitDetailViewModel.VisitState(
     caretPosition = 0
 )
 
+private val previewReturnVisit = VisitDetailViewModel.VisitState(
+    id = UUID.randomUUID(),
+    subject = "Quem é o Rei do Reino de Deus?",
+    date = previewDate2,
+    isDone = false,
+    householderId = UUID.randomUUID(),
+    canBeRemoved = false,
+    orderIndex = 0,
+    isConversationListExpanded = false,
+    isVisitTypeListExpanded = false,
+    visitType = VisitDetailViewModel.VisitTypeState(
+        type = VisitType.RETURN_VISIT,
+        description = StringResource(
+            textResId = R.string.first_visit,
+            arguments = listOf()
+        )
+    ),
+    nextConversationSuggestion = null,
+    showNextVisitSuggestion = false,
+    showClearSubject = false,
+    wasRemoved = false,
+    caretPosition = 0
+)
+
+private val previewConversationSuggestion = VisitDetailViewModel.ConversationState(
+    id = UUID.randomUUID(),
+    question = previewReturnVisit.subject,
+    questionAndResponse = "${previewReturnVisit.subject} - Lucas 1:31-33",
+    show = true,
+    conversationGroupId = UUID.randomUUID(),
+    orderIndex = 0,
+)
+
 private val previewVisitDetailUiState = VisitDetailViewModel.UiState(
     householder = VisitDetailViewModel.HouseholderState(
         id = UUID.randomUUID(),
@@ -248,7 +268,7 @@ private val previewVisitDetailUiState = VisitDetailViewModel.UiState(
         showExpandNotes = false,
         isNotesExpanded = false,
     ),
-    visitList = listOf(previewVisitUiState),
+    visitList = listOf(previewFirstVisitUiState),
     conversationList = listOf(),
     visitTypeList = listOf(),
     eventState = VisitDetailViewModel.UiEventState.Idle
