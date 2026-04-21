@@ -153,10 +153,25 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Morador receptivo, prefere visitas pela manhã. Tem interesse em estudar a Bíblia.",
+                    notes = "Morador receptivo, prefere visitas pela manhã.\nTem interesse em estudar a Bíblia.",
                     showClearNotes = false,
                     showExpandNotes = true,
                     isNotesExpanded = true
+                ),
+                visitList = listOf(previewVisitUiState.copy(canBeRemoved = false))
+            ),
+            isDarkMode = false
+        ),
+        VisitDetailPreviewConfig(
+            configName = "Notes Collapsed",
+            mainActivityUiState = previewMainActivityUiState,
+            householderId = UUID.randomUUID(),
+            uiState = previewVisitDetailUiState.copy(
+                householder = previewVisitDetailUiState.householder.copy(
+                    notes = "Morador receptivo, prefere visitas pela manhã.\nTem interesse em estudar a Bíblia.",
+                    showClearNotes = false,
+                    showExpandNotes = true,
+                    isNotesExpanded = false
                 ),
                 visitList = listOf(previewVisitUiState.copy(canBeRemoved = false))
             ),
@@ -230,8 +245,8 @@ private val previewVisitDetailUiState = VisitDetailViewModel.UiState(
         addressState = VisitDetailViewModel.HouseholderAddressState.LoadLocation,
         showClearNotes = false,
         isLoadingAddress = false,
-        showExpandNotes = true,
-        isNotesExpanded = true,
+        showExpandNotes = false,
+        isNotesExpanded = false,
     ),
     visitList = listOf(previewVisitUiState),
     conversationList = listOf(),
