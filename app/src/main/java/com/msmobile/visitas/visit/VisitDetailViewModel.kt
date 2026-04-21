@@ -388,7 +388,8 @@ class VisitDetailViewModel
             copy(
                 householder = householder.copy(
                     showClearNotes = showClearNotes,
-                    showExpandNotes = showExpandNotes
+                    showExpandNotes = showExpandNotes,
+                    isNotesExpanded = hasFocus
                 ),
                 eventState = UiEventState.Idle
             )
