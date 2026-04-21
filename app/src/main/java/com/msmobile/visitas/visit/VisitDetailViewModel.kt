@@ -128,6 +128,7 @@ class VisitDetailViewModel
             UiEvent.ClearNameClicked -> clearNameClicked()
             UiEvent.ClearAddressClicked -> clearAddressClicked()
             UiEvent.ClearNotesClicked -> clearNotesClicked()
+            UiEvent.ExpandNotesClicked -> expandNotesClicked()
             UiEvent.SnackbarDismissed -> snackbarDismissed()
             UiEvent.LocationRationaleAccepted -> handleLocationRationaleAccepted()
             UiEvent.LocationRationaleDismissed -> handleLocationRationaleDismissed()
@@ -383,7 +384,10 @@ class VisitDetailViewModel
         newState {
             val showClearNotes = hasFocus && householder.notes?.isNotEmpty() == true
             copy(
-                householder = householder.copy(showClearNotes = showClearNotes),
+                householder = householder.copy(
+                    showClearNotes = showClearNotes,
+                    isNotesExpanded = hasFocus
+                ),
                 eventState = UiEventState.Idle
             )
         }
@@ -430,6 +434,12 @@ class VisitDetailViewModel
 
     private fun clearNotesClicked() {
         notesChanged("")
+    }
+
+    private fun expandNotesClicked() {
+        newState {
+            copy(householder = householder.copy(isNotesExpanded = !householder.isNotesExpanded))
+        }
     }
 
     private fun clearSubjectClicked(visit: VisitState) {
@@ -885,7 +895,10 @@ class VisitDetailViewModel
         newState {
             val showClearNotes = value.isNotEmpty()
             copy(
-                householder = householder.copy(notes = value, showClearNotes = showClearNotes),
+                householder = householder.copy(
+                    notes = value,
+                    showClearNotes = showClearNotes
+                ),
                 eventState = UiEventState.Idle
             )
         }
@@ -945,6 +958,7 @@ class VisitDetailViewModel
             address = "",
             notes = null,
             showClearName = false,
+            isNotesExpanded = false,
             addressState = HouseholderAddressState.LoadLocation,
             showClearNotes = false,
             isLoadingAddress = false
@@ -1108,6 +1122,7 @@ class VisitDetailViewModel
                 showClearName = false,
                 addressState = addressState,
                 showClearNotes = false,
+                isNotesExpanded = false, // Notes collapsed by default; user can expand if needed
                 isLoadingAddress = false,
                 addressLatitude = addressLatitude,
                 addressLongitude = addressLongitude,
@@ -1282,6 +1297,7 @@ class VisitDetailViewModel
         val addressState: HouseholderAddressState,
         val showClearNotes: Boolean,
         val isLoadingAddress: Boolean,
+        val isNotesExpanded: Boolean,
         val addressLatitude: Double? = null,
         val addressLongitude: Double? = null,
         val preferredDay: VisitPreferredDay = VisitPreferredDay.ANY,
@@ -1343,6 +1359,7 @@ class VisitDetailViewModel
         data object ClearNameClicked : UiEvent()
         data object ClearAddressClicked : UiEvent()
         data object ClearNotesClicked : UiEvent()
+        data object ExpandNotesClicked : UiEvent()
         data object SnackbarDismissed : UiEvent()
         data object LocationRationaleAccepted : UiEvent()
         data object LocationRationaleDismissed : UiEvent()

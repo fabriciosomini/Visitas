@@ -164,6 +164,136 @@ class VisitDetailViewModelTest {
     }
 
     @Test
+    fun `onEvent with HouseholderNotesChanged shows clear button when field is focused`() {
+        // Arrange
+        val viewModel = createViewModel()
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(hasFocus = true))
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged("Some notes"))
+
+        // Assert
+        assertTrue(viewModel.uiState.value.householder.showClearNotes)
+    }
+
+    @Test
+    fun `onEvent with HouseholderNotesChanged hides clear button when notes is empty`() {
+        // Arrange
+        val viewModel = createViewModel()
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged("Some notes"))
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged(""))
+
+        // Assert
+        assertFalse(viewModel.uiState.value.householder.showClearNotes)
+    }
+
+    @Test
+    fun `onEvent with ClearNotesClicked hides clear button`() {
+        // Arrange
+        val viewModel = createViewModel()
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged("Some notes"))
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ClearNotesClicked)
+
+        // Assert
+        assertFalse(viewModel.uiState.value.householder.showClearNotes)
+    }
+
+    @Test
+    fun `onEvent with NotesFocusChanged gaining focus shows clear and hides expand when notes has content`() {
+        // Arrange
+        val viewModel = createViewModel()
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged("Some notes"))
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(hasFocus = true))
+
+        // Assert
+        assertTrue(viewModel.uiState.value.householder.showClearNotes)
+    }
+
+    @Test
+    fun `onEvent with NotesFocusChanged losing focus hides clear button when notes has content`() {
+        // Arrange
+        val viewModel = createViewModel()
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged("Line 1\nLine 2"))
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(hasFocus = true))
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(hasFocus = false))
+
+        // Assert
+        assertFalse(viewModel.uiState.value.householder.showClearNotes)
+    }
+
+    @Test
+    fun `onEvent with NotesFocusChanged losing focus hides clear button when notes is empty`() {
+        // Arrange
+        val viewModel = createViewModel()
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(hasFocus = false))
+
+        // Assert
+        assertFalse(viewModel.uiState.value.householder.showClearNotes)
+    }
+
+    @Test
+    fun `onEvent with NotesFocusChanged gaining focus hides clear button when notes is empty`() {
+        // Arrange
+        val viewModel = createViewModel()
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(hasFocus = true))
+
+        // Assert
+        assertFalse(viewModel.uiState.value.householder.showClearNotes)
+    }
+
+    @Test
+    fun `onEvent with ExpandNotesClicked toggles isNotesExpanded to true`() {
+        // Arrange
+        val viewModel = createViewModel()
+        assertFalse(viewModel.uiState.value.householder.isNotesExpanded)
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ExpandNotesClicked)
+
+        // Assert
+        assertTrue(viewModel.uiState.value.householder.isNotesExpanded)
+    }
+
+    @Test
+    fun `onEvent with ExpandNotesClicked toggles isNotesExpanded back to false`() {
+        // Arrange
+        val viewModel = createViewModel()
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ExpandNotesClicked)
+        assertTrue(viewModel.uiState.value.householder.isNotesExpanded)
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ExpandNotesClicked)
+
+        // Assert
+        assertFalse(viewModel.uiState.value.householder.isNotesExpanded)
+    }
+
+    @Test
+    fun `ViewCreated with existing householder does not set showClearNotes on load`() {
+        // Arrange — default householder has single-line "Test Notes"
+        val viewModel = createViewModel()
+
+        // Act
+        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
+
+        // Assert
+        assertFalse(viewModel.uiState.value.householder.showClearNotes)
+    }
+
+
+    @Test
     fun `onEvent with AddVisitClicked adds a new visit`() {
         // Arrange
         val viewModel = createViewModel()
@@ -642,6 +772,7 @@ class VisitDetailViewModelTest {
         householderLongitude: Double? = null,
         householderPreferredDay: VisitPreferredDay = VisitPreferredDay.ANY,
         householderPreferredTime: VisitPreferredTime = VisitPreferredTime.ANY,
+        householderNotes: String = "Test Notes",
         visitTimeValidResult: Boolean = true
     ): VisitDetailViewModel {
         val dispatchers = DispatcherProvider(
@@ -657,7 +788,8 @@ class VisitDetailViewModelTest {
                 latitude = householderLatitude,
                 longitude = householderLongitude,
                 preferredDay = householderPreferredDay,
-                preferredTime = householderPreferredTime
+                preferredTime = householderPreferredTime,
+                notes = householderNotes
             )
         }
         householderRepositoryRef?.value = householderRepository
@@ -735,13 +867,14 @@ class VisitDetailViewModelTest {
         latitude: Double? = null,
         longitude: Double? = null,
         preferredDay: VisitPreferredDay = VisitPreferredDay.ANY,
-        preferredTime: VisitPreferredTime = VisitPreferredTime.ANY
+        preferredTime: VisitPreferredTime = VisitPreferredTime.ANY,
+        notes: String = "Test Notes"
     ): Householder {
         return Householder(
             id = HOUSEHOLDER_ID,
             name = "Test Name",
             address = "Test Address",
-            notes = "Test Notes",
+            notes = notes,
             addressLatitude = latitude,
             addressLongitude = longitude,
             preferredDay = preferredDay,

@@ -125,4 +125,6 @@
     <string name="permission_rationale_icon_content_description">Permission required</string>
     <string name="search_icon_content_description">Search</string>
     <string name="restore_backup_icon_content_description">Restore backup</string>
+    <string name="expand_text_content_description">Expand text</string>
+    <string name="collapse_text_content_description">Collapse text</string>
 </resources>

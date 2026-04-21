@@ -9,6 +9,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -62,9 +63,12 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.annotation.VisibleForTesting
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -94,6 +98,7 @@ import com.msmobile.visitas.ui.views.DetailFooter
 import com.msmobile.visitas.ui.views.LazyColumnWithScrollbar
 import com.msmobile.visitas.ui.views.PermissionRationaleSheet
 import com.msmobile.visitas.ui.views.TextFieldClearButton
+import com.msmobile.visitas.ui.views.TextFieldExpandButton
 import com.msmobile.visitas.util.DetailScreenStyle
 import com.msmobile.visitas.util.borderPadding
 import com.msmobile.visitas.util.horizontalFieldPadding
@@ -343,31 +348,66 @@ private fun HouseholderDetail(
         onEvent = onEvent
     )
     HorizontalDivider()
-    TextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged { focusState ->
-                onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(focusState.hasFocus))
-            },
-        value = householder.notes ?: "",
-        keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.Sentences,
-            autoCorrectEnabled = true
-        ),
-        trailingIcon = {
-            TextFieldClearButton(show = householder.showClearNotes, onClear = {
-                onEvent(VisitDetailViewModel.UiEvent.ClearNotesClicked)
-            })
-        },
-        label = {
-            Text(text = stringResource(id = R.string.householder_notes))
-        },
-        colors = EditableTextFieldColors,
-        shape = MaterialTheme.shapes.textField.removeTopCorner(),
-        onValueChange = { value ->
-            onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged(value))
+    val textStyle = LocalTextStyle.current
+    val textMeasurer = rememberTextMeasurer()
+    var notesTextValue by remember { mutableStateOf(TextFieldValue(householder.notes ?: "")) }
+    LaunchedEffect(householder.notes) {
+        if (notesTextValue.text != (householder.notes ?: "")) {
+            notesTextValue = TextFieldValue(householder.notes ?: "")
         }
-    )
+    }
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val notesHasOverflow = remember(householder.notes, constraints.maxWidth, textStyle) {
+            if (householder.notes.isNullOrEmpty()) false
+            else {
+                val result = textMeasurer.measure(
+                    text = householder.notes,
+                    style = textStyle,
+                    constraints = constraints,
+                    maxLines = 1,
+                    overflow = TextOverflow.Clip
+                )
+                result.hasVisualOverflow
+            }
+        }
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged { focusState ->
+                    if (!focusState.hasFocus) {
+                        notesTextValue = notesTextValue.copy(selection = TextRange(0))
+                    }
+                    onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(focusState.hasFocus))
+                },
+            value = notesTextValue,
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                autoCorrectEnabled = true
+            ),
+            trailingIcon = {
+                TextFieldClearButton(show = householder.showClearNotes, onClear = {
+                    onEvent(VisitDetailViewModel.UiEvent.ClearNotesClicked)
+                })
+                TextFieldExpandButton(
+                    show = !householder.showClearNotes && notesHasOverflow,
+                    isExpanded = householder.isNotesExpanded,
+                    onExpand = {
+                        onEvent(VisitDetailViewModel.UiEvent.ExpandNotesClicked)
+                    }
+                )
+            },
+            label = {
+                Text(text = stringResource(id = R.string.householder_notes))
+            },
+            colors = EditableTextFieldColors,
+            shape = MaterialTheme.shapes.textField.removeTopCorner(),
+            singleLine = !householder.isNotesExpanded,
+            onValueChange = { value ->
+                notesTextValue = value
+                onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged(value.text))
+            }
+        )
+    }
 }
 
 @Composable
