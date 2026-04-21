@@ -30,7 +30,6 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                     addressState = VisitDetailViewModel.HouseholderAddressState.LoadLocation,
                     showClearNotes = false,
                     isLoadingAddress = false,
-                    showExpandNotes = false,
                     isNotesExpanded = false,
                 ),
                 visitList = listOf(
@@ -116,9 +115,8 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Morador receptivo, prefere visitas pela manhã.\nTem interesse em estudar a Bíblia.",
+                    notes = "Morador receptivo, prefere visitas pela manhã. Tem interesse em estudar a Bíblia.",
                     showClearNotes = true,
-                    showExpandNotes = false,
                     isNotesExpanded = true
                 ),
                 visitList = listOf(previewFirstVisitUiState.copy(canBeRemoved = false))
@@ -131,9 +129,8 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Morador receptivo, prefere visitas pela manhã.\nTem interesse em estudar a Bíblia.",
+                    notes = "Morador receptivo, prefere visitas pela manhã. Tem interesse em estudar a Bíblia.",
                     showClearNotes = false,
-                    showExpandNotes = true,
                     isNotesExpanded = true
                 ),
                 visitList = listOf(previewFirstVisitUiState.copy(canBeRemoved = false))
@@ -148,7 +145,6 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
                 householder = previewVisitDetailUiState.householder.copy(
                     notes = "Morador receptivo, prefere visitas pela manhã.\nTem interesse em estudar a Bíblia.",
                     showClearNotes = false,
-                    showExpandNotes = true,
                     isNotesExpanded = false
                 ),
                 visitList = listOf(previewFirstVisitUiState.copy(canBeRemoved = false))
@@ -280,7 +276,6 @@ private val previewVisitDetailUiState = VisitDetailViewModel.UiState(
         addressState = VisitDetailViewModel.HouseholderAddressState.LoadLocation,
         showClearNotes = false,
         isLoadingAddress = false,
-        showExpandNotes = false,
         isNotesExpanded = false,
     ),
     visitList = listOf(previewFirstVisitUiState),

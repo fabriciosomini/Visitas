@@ -6,7 +6,6 @@ import com.msmobile.visitas.R
 import com.msmobile.visitas.conversation.Conversation
 import com.msmobile.visitas.conversation.ConversationRepository
 import com.msmobile.visitas.extension.containsAllWords
-import com.msmobile.visitas.extension.hasMultipleLines
 import com.msmobile.visitas.extension.split
 import com.msmobile.visitas.extension.subListInclusive
 import com.msmobile.visitas.householder.Householder
@@ -384,11 +383,9 @@ class VisitDetailViewModel
     private fun notesFocusChanged(hasFocus: Boolean) {
         newState {
             val showClearNotes = hasFocus && householder.notes?.isNotEmpty() == true
-            val showExpandNotes = !showClearNotes && householder.notes?.hasMultipleLines() == true
             copy(
                 householder = householder.copy(
                     showClearNotes = showClearNotes,
-                    showExpandNotes = showExpandNotes,
                     isNotesExpanded = hasFocus
                 ),
                 eventState = UiEventState.Idle
@@ -897,12 +894,10 @@ class VisitDetailViewModel
     private fun notesChanged(value: String) {
         newState {
             val showClearNotes = value.isNotEmpty()
-            val showExpandNotes = false // field is focused while typing; expand shows on blur
             copy(
                 householder = householder.copy(
                     notes = value,
-                    showClearNotes = showClearNotes,
-                    showExpandNotes = showExpandNotes
+                    showClearNotes = showClearNotes
                 ),
                 eventState = UiEventState.Idle
             )
@@ -963,7 +958,6 @@ class VisitDetailViewModel
             address = "",
             notes = null,
             showClearName = false,
-            showExpandNotes = false,
             isNotesExpanded = false,
             addressState = HouseholderAddressState.LoadLocation,
             showClearNotes = false,
@@ -1128,7 +1122,6 @@ class VisitDetailViewModel
                 showClearName = false,
                 addressState = addressState,
                 showClearNotes = false,
-                showExpandNotes = notes?.hasMultipleLines() == true,
                 isNotesExpanded = false, // Notes collapsed by default; user can expand if needed
                 isLoadingAddress = false,
                 addressLatitude = addressLatitude,
@@ -1304,7 +1297,6 @@ class VisitDetailViewModel
         val addressState: HouseholderAddressState,
         val showClearNotes: Boolean,
         val isLoadingAddress: Boolean,
-        val showExpandNotes: Boolean,
         val isNotesExpanded: Boolean,
         val addressLatitude: Double? = null,
         val addressLongitude: Double? = null,

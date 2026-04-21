@@ -164,7 +164,7 @@ class VisitDetailViewModelTest {
     }
 
     @Test
-    fun `onEvent with HouseholderNotesChanged shows clear button and hides expand when field is focused`() {
+    fun `onEvent with HouseholderNotesChanged shows clear button when field is focused`() {
         // Arrange
         val viewModel = createViewModel()
         viewModel.onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(hasFocus = true))
@@ -174,11 +174,10 @@ class VisitDetailViewModelTest {
 
         // Assert
         assertTrue(viewModel.uiState.value.householder.showClearNotes)
-        assertFalse(viewModel.uiState.value.householder.showExpandNotes)
     }
 
     @Test
-    fun `onEvent with HouseholderNotesChanged hides both buttons when notes is empty`() {
+    fun `onEvent with HouseholderNotesChanged hides clear button when notes is empty`() {
         // Arrange
         val viewModel = createViewModel()
         viewModel.onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged("Some notes"))
@@ -188,11 +187,10 @@ class VisitDetailViewModelTest {
 
         // Assert
         assertFalse(viewModel.uiState.value.householder.showClearNotes)
-        assertFalse(viewModel.uiState.value.householder.showExpandNotes)
     }
 
     @Test
-    fun `onEvent with ClearNotesClicked hides both buttons`() {
+    fun `onEvent with ClearNotesClicked hides clear button`() {
         // Arrange
         val viewModel = createViewModel()
         viewModel.onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged("Some notes"))
@@ -202,7 +200,6 @@ class VisitDetailViewModelTest {
 
         // Assert
         assertFalse(viewModel.uiState.value.householder.showClearNotes)
-        assertFalse(viewModel.uiState.value.householder.showExpandNotes)
     }
 
     @Test
@@ -216,11 +213,10 @@ class VisitDetailViewModelTest {
 
         // Assert
         assertTrue(viewModel.uiState.value.householder.showClearNotes)
-        assertFalse(viewModel.uiState.value.householder.showExpandNotes)
     }
 
     @Test
-    fun `onEvent with NotesFocusChanged losing focus shows expand and hides clear when notes has multiple lines`() {
+    fun `onEvent with NotesFocusChanged losing focus hides clear button when notes has content`() {
         // Arrange
         val viewModel = createViewModel()
         viewModel.onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged("Line 1\nLine 2"))
@@ -231,11 +227,10 @@ class VisitDetailViewModelTest {
 
         // Assert
         assertFalse(viewModel.uiState.value.householder.showClearNotes)
-        assertTrue(viewModel.uiState.value.householder.showExpandNotes)
     }
 
     @Test
-    fun `onEvent with NotesFocusChanged losing focus hides both buttons when notes is empty`() {
+    fun `onEvent with NotesFocusChanged losing focus hides clear button when notes is empty`() {
         // Arrange
         val viewModel = createViewModel()
 
@@ -244,11 +239,10 @@ class VisitDetailViewModelTest {
 
         // Assert
         assertFalse(viewModel.uiState.value.householder.showClearNotes)
-        assertFalse(viewModel.uiState.value.householder.showExpandNotes)
     }
 
     @Test
-    fun `onEvent with NotesFocusChanged gaining focus hides both buttons when notes is empty`() {
+    fun `onEvent with NotesFocusChanged gaining focus hides clear button when notes is empty`() {
         // Arrange
         val viewModel = createViewModel()
 
@@ -257,7 +251,6 @@ class VisitDetailViewModelTest {
 
         // Assert
         assertFalse(viewModel.uiState.value.householder.showClearNotes)
-        assertFalse(viewModel.uiState.value.householder.showExpandNotes)
     }
 
     @Test
@@ -288,20 +281,7 @@ class VisitDetailViewModelTest {
     }
 
     @Test
-    fun `ViewCreated with existing householder sets showExpandNotes when notes has multiple lines`() {
-        // Arrange — householder has multi-line notes
-        val viewModel = createViewModel(householderNotes = "Line 1\nLine 2")
-
-        // Act
-        viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
-
-        // Assert — field is unfocused on load, notes has multiple lines
-        assertTrue(viewModel.uiState.value.householder.showExpandNotes)
-        assertFalse(viewModel.uiState.value.householder.showClearNotes)
-    }
-
-    @Test
-    fun `ViewCreated with existing householder does not set showExpandNotes when notes is single line`() {
+    fun `ViewCreated with existing householder does not set showClearNotes on load`() {
         // Arrange — default householder has single-line "Test Notes"
         val viewModel = createViewModel()
 
@@ -309,26 +289,9 @@ class VisitDetailViewModelTest {
         viewModel.onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId = HOUSEHOLDER_ID))
 
         // Assert
-        assertFalse(viewModel.uiState.value.householder.showExpandNotes)
         assertFalse(viewModel.uiState.value.householder.showClearNotes)
     }
 
-    @Test
-    fun `clear and expand notes buttons are never both true simultaneously after focus changes`() {
-        // Arrange — use multi-line notes so showExpandNotes can become true on blur
-        val viewModel = createViewModel()
-        viewModel.onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged("Line 1\nLine 2"))
-
-        // Act & Assert — cycle through focus states and verify mutual exclusivity
-        listOf(true, false, true, false).forEach { hasFocus ->
-            viewModel.onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(hasFocus))
-            val state = viewModel.uiState.value.householder
-            assertFalse(
-                "showClearNotes and showExpandNotes must not both be true (hasFocus=$hasFocus)",
-                state.showClearNotes && state.showExpandNotes
-            )
-        }
-    }
 
     @Test
     fun `onEvent with AddVisitClicked adds a new visit`() {

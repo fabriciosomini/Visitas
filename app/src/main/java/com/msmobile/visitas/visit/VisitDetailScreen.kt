@@ -9,6 +9,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -65,6 +66,8 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -344,39 +347,56 @@ private fun HouseholderDetail(
         onEvent = onEvent
     )
     HorizontalDivider()
-    TextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged { focusState ->
-                onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(focusState.hasFocus))
-            },
-        value = householder.notes ?: "",
-        keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.Sentences,
-            autoCorrectEnabled = true
-        ),
-        trailingIcon = {
-            TextFieldClearButton(show = householder.showClearNotes, onClear = {
-                onEvent(VisitDetailViewModel.UiEvent.ClearNotesClicked)
-            })
-            TextFieldExpandButton(
-                show = householder.showExpandNotes,
-                isExpanded = householder.isNotesExpanded,
-                onExpand = {
-                    onEvent(VisitDetailViewModel.UiEvent.ExpandNotesClicked)
-                }
-            )
-        },
-        label = {
-            Text(text = stringResource(id = R.string.householder_notes))
-        },
-        colors = EditableTextFieldColors,
-        shape = MaterialTheme.shapes.textField.removeTopCorner(),
-        singleLine = !householder.isNotesExpanded,
-        onValueChange = { value ->
-            onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged(value))
+    val textMeasurer = rememberTextMeasurer()
+    val bodyLargeStyle = MaterialTheme.typography.bodyLarge
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val notesHasOverflow = remember(householder.notes, constraints.maxWidth) {
+            if (householder.notes.isNullOrEmpty()) false
+            else {
+                val result = textMeasurer.measure(
+                    text = householder.notes,
+                    style = bodyLargeStyle,
+                    constraints = constraints,
+                    maxLines = 1,
+                    overflow = TextOverflow.Clip
+                )
+                result.hasVisualOverflow
+            }
         }
-    )
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged { focusState ->
+                    onEvent(VisitDetailViewModel.UiEvent.NotesFocusChanged(focusState.hasFocus))
+                },
+            value = householder.notes ?: "",
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                autoCorrectEnabled = true
+            ),
+            trailingIcon = {
+                TextFieldClearButton(show = householder.showClearNotes, onClear = {
+                    onEvent(VisitDetailViewModel.UiEvent.ClearNotesClicked)
+                })
+                TextFieldExpandButton(
+                    show = !householder.showClearNotes && notesHasOverflow,
+                    isExpanded = householder.isNotesExpanded,
+                    onExpand = {
+                        onEvent(VisitDetailViewModel.UiEvent.ExpandNotesClicked)
+                    }
+                )
+            },
+            label = {
+                Text(text = stringResource(id = R.string.householder_notes))
+            },
+            colors = EditableTextFieldColors,
+            shape = MaterialTheme.shapes.textField.removeTopCorner(),
+            singleLine = !householder.isNotesExpanded,
+            onValueChange = { value ->
+                onEvent(VisitDetailViewModel.UiEvent.HouseholderNotesChanged(value))
+            }
+        )
+    }
 }
 
 @Composable
