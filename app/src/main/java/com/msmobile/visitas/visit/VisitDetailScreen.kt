@@ -1,5 +1,6 @@
 package com.msmobile.visitas.visit
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
@@ -37,10 +38,11 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -62,14 +64,11 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
-import androidx.annotation.VisibleForTesting
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -180,20 +179,16 @@ private fun VisitDetailScreenContent(
             }
         },
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                expanded = !isKeyboardOpen,
-                text = {
-                    Text(text = stringResource(id = R.string.add_visit))
-                },
-                icon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = stringResource(id = R.string.add_visit)
-                    )
-                }, onClick = {
+            FloatingActionButton(
+                onClick = {
                     onEvent(VisitDetailViewModel.UiEvent.AddVisitClicked)
                 }
-            )
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = stringResource(id = R.string.add_visit)
+                )
+            }
         }
     ) { paddingValues ->
         val bottomPadding by remember { mutableStateOf(paddingValues.calculateBottomPadding()) }
