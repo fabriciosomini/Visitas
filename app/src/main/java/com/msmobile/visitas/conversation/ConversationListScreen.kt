@@ -243,7 +243,7 @@ internal fun ConversationListScreenPreview(
 ) {
     VisitasTheme(config.isDarkMode) {
         AppScaffold(
-            uiState = previewMainActivityUiState,
+            uiState = config.mainActivityUiState,
             currentDestination = ConversationListScreenDestination,
             onEvent = {},
             onNavigateToTab = {},
