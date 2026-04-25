@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.msmobile.visitas.AppScaffold
 import com.msmobile.visitas.R
 import com.msmobile.visitas.extension.showShareIntent
+import com.msmobile.visitas.ui.theme.PreviewFoldable
 import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.util.borderPadding
 import com.ramcosta.composedestinations.generated.destinations.VisitListScreenDestination
@@ -155,6 +156,7 @@ private fun rememberRestoreBackupLauncher(
 
 @VisibleForTesting
 @Preview
+@PreviewFoldable
 @Composable
 internal fun BackupScreenPreview(
     @PreviewParameter(BackupSheetPreviewConfigProvider::class) config: BackupSheetPreviewConfig

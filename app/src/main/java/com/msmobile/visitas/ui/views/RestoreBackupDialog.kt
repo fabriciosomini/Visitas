@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.msmobile.visitas.R
+import com.msmobile.visitas.ui.theme.PreviewFoldable
 import com.msmobile.visitas.ui.theme.VisitasTheme
 
 @Composable
@@ -50,6 +51,7 @@ fun RestoreBackupDialog(
 
 @VisibleForTesting
 @Preview
+@PreviewFoldable
 @Composable
 internal fun RestoreBackupDialogPreview(
     @PreviewParameter(RestoreBackupDialogPreviewConfigProvider::class) config: RestoreBackupDialogPreviewConfig

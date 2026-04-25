@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.msmobile.visitas.ui.theme.PreviewFoldable
 import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.ui.views.BottomNavigation
 import com.ramcosta.composedestinations.spec.DestinationSpec
@@ -81,6 +82,7 @@ private fun StateHandler(
 @VisibleForTesting
 @Composable
 @Preview
+@PreviewFoldable
 internal fun AppScaffoldPreview(
     @PreviewParameter(AppScaffoldPreviewConfigProvider::class) config: AppScaffoldPreviewConfig
 ) {
