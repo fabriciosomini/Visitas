@@ -27,7 +27,7 @@ internal class BackupSheetPreviewConfigProvider : PreviewParameterProvider<Backu
             backupUiState = BackupViewModel.UiState(
                 isLoading = false,
                 backupResult = BackupViewModel.BackupResult.RestoreFailure(
-                    message = "Falha ao restaurar o backup"
+                    message = "Failed to restore backup"
                 )
             ),
             isDarkMode = false
@@ -38,7 +38,7 @@ internal class BackupSheetPreviewConfigProvider : PreviewParameterProvider<Backu
             backupUiState = BackupViewModel.UiState(
                 isLoading = false,
                 backupResult = BackupViewModel.BackupResult.RestoreSuccess(
-                    message = "Backup restaurado com sucesso"
+                    message = "Backup restored successfully"
                 )
             ),
             isDarkMode = false

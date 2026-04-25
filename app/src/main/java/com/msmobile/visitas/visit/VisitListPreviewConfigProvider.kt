@@ -44,7 +44,7 @@ internal class VisitListPreviewConfigProvider : PreviewParameterProvider<VisitLi
             summaryUiState = previewSummaryUiState,
             visitListUiState = previewVisitListUiState.copy(
                 visitList = emptyList(),
-                filter = previewVisitListUiState.filter.copy(search = "Maria")
+                filter = previewVisitListUiState.filter.copy(search = "Mary")
             ),
             isDarkMode = false
         ),
@@ -104,15 +104,15 @@ private val previewVisitListUiState = VisitListViewModel.UiState(
     visitList = listOf(
         VisitListViewModel.VisitHouseholderState(
             householderId = UUID.randomUUID(),
-            householderName = "Maria Madalena",
-            householderAddress = "Rua das Oliveiras, 12 - Próximo ao jardim do Getsêmani",
+            householderName = "Mary Magdalene",
+            householderAddress = "12 Olive Tree Street - Near the Garden of Gethsemane",
             householderAddressDistance = AddressProvider.AddressDistance.Nearby(100f),
             date = previewDate1,
             isDone = false,
             hasToBeRescheduled = false,
             isPendingVisitMenuExpanded = false,
-            subject = "O que é o Reino de Deus?",
-            subjectPreview = "O que é o Reino de Deus? — Daniel 2:44",
+            subject = "What is God's Kingdom?",
+            subjectPreview = "What is God's Kingdom? — Daniel 2:44",
             hide = false,
             visitId = UUID.randomUUID(),
             type = VisitType.FIRST_VISIT,
@@ -121,37 +121,37 @@ private val previewVisitListUiState = VisitListViewModel.UiState(
         ),
         VisitListViewModel.VisitHouseholderState(
             householderId = UUID.randomUUID(),
-            householderName = "José de Arimateia",
-            householderAddress = "Av. dos Cedros, 45",
+            householderName = "Joseph of Arimathea",
+            householderAddress = "45 Cedar Avenue",
             date = previewDate2,
             isDone = false,
             hasToBeRescheduled = true,
             isPendingVisitMenuExpanded = false,
-            subjectPreview = "A ressurreição dos mortos — João 5:28, 29",
+            subjectPreview = "The resurrection of the dead — John 5:28, 29",
             hide = false,
             visitId = UUID.randomUUID(),
             type = VisitType.FIRST_VISIT,
             householderLatitude = 0.0,
             householderLongitude = 0.0,
             householderAddressDistance = AddressProvider.AddressDistance.FarAway(600f),
-            subject = "A ressurreição dos mortos"
+            subject = "The resurrection of the dead"
         ),
         VisitListViewModel.VisitHouseholderState(
             householderId = UUID.randomUUID(),
-            householderName = "Nicodemos",
-            householderAddress = "Rua dos Fariseus, 7",
+            householderName = "Nicodemus Silva",
+            householderAddress = "7 Pharisee Street",
             date = previewDate3,
             isDone = false,
             hasToBeRescheduled = false,
             isPendingVisitMenuExpanded = false,
-            subjectPreview = "Quem é Jesus Cristo? — Lucas 1:31-33",
+            subjectPreview = "Who is Jesus Christ? — Luke 1:31-33",
             hide = false,
             visitId = UUID.randomUUID(),
             type = VisitType.FIRST_VISIT,
             householderLatitude = 0.0,
             householderLongitude = 0.0,
             householderAddressDistance = AddressProvider.AddressDistance.NoData,
-            subject = "Quem é Jesus Cristo?"
+            subject = "Who is Jesus Christ?"
         ),
     ),
     selectedTabIndex = 0,

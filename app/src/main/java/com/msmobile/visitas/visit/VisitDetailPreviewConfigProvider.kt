@@ -115,7 +115,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Morador receptivo, prefere visitas pela manhã. Tem interesse em estudar a Bíblia.",
+                    notes = "Receptive resident, prefers morning visits. Interested in studying the Bible.",
                     showClearNotes = true,
                     isNotesExpanded = true
                 ),
@@ -129,7 +129,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Morador receptivo, prefere visitas pela manhã. Tem interesse em estudar a Bíblia.",
+                    notes = "Receptive resident, prefers morning visits. Interested in studying the Bible.",
                     showClearNotes = false,
                     isNotesExpanded = true
                 ),
@@ -143,7 +143,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Morador receptivo, prefere visitas pela manhã.\nTem interesse em estudar a Bíblia.",
+                    notes = "Receptive resident, prefers morning visits.\nInterested in studying the Bible.",
                     showClearNotes = false,
                     isNotesExpanded = false
                 ),
@@ -211,7 +211,7 @@ private val previewNewVisitUiState = VisitDetailViewModel.VisitState(
 
 private val previewFirstVisitUiState = VisitDetailViewModel.VisitState(
     id = UUID.randomUUID(),
-    subject = "O que é o Reino de Deus?",
+    subject = "What is God's Kingdom?",
     date = previewDate1,
     isDone = true,
     householderId = UUID.randomUUID(),
@@ -235,7 +235,7 @@ private val previewFirstVisitUiState = VisitDetailViewModel.VisitState(
 
 private val previewReturnVisit = VisitDetailViewModel.VisitState(
     id = UUID.randomUUID(),
-    subject = "Quem é o Rei do Reino de Deus?",
+    subject = "Who is the King of God's Kingdom?",
     date = previewDate2,
     isDone = false,
     householderId = UUID.randomUUID(),
@@ -269,9 +269,9 @@ private val previewConversationSuggestion = VisitDetailViewModel.ConversationSta
 private val previewVisitDetailUiState = VisitDetailViewModel.UiState(
     householder = VisitDetailViewModel.HouseholderState(
         id = UUID.randomUUID(),
-        name = "Pedro",
-        address = "Rua 1",
-        notes = "Morador receptivo",
+    name = "Pedro",
+    address = "Rua 1",
+    notes = "Receptive resident",
         showClearName = true,
         addressState = VisitDetailViewModel.HouseholderAddressState.LoadLocation,
         showClearNotes = false,

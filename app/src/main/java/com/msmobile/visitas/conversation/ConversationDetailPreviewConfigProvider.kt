@@ -45,8 +45,8 @@ internal class ConversationDetailPreviewConfigProvider :
                 conversationList = previewConversationDetailUiState.conversationList + listOf(
                     ConversationState(
                         id = UUID.randomUUID(),
-                        question = "O que a Bíblia diz sobre a ressurreição?",
-                        response = "Os mortos ressuscitarão — João 5:28, 29",
+                        question = "What does the Bible say about the resurrection?",
+                        response = "The dead will be resurrected — John 5:28, 29",
                         showQuestionClear = false,
                         showResponseClear = false,
                         orderIndex = 2,
@@ -96,8 +96,8 @@ private val previewConversationDetailUiState = ConversationDetailViewModel.UiSta
     conversationList = listOf(
         ConversationState(
             id = UUID.randomUUID(),
-            question = "O que é o Reino de Deus?",
-            response = "É o governo celestial de Deus por meio de Jesus Cristo — Daniel 2:44",
+            question = "What is God's Kingdom?",
+            response = "It is God's heavenly government through Jesus Christ — Daniel 2:44",
             showQuestionClear = true,
             showResponseClear = false,
             orderIndex = 0,
@@ -107,8 +107,8 @@ private val previewConversationDetailUiState = ConversationDetailViewModel.UiSta
         ),
         ConversationState(
             id = UUID.randomUUID(),
-            question = "Quem é o Rei do Reino de Deus?",
-            response = "Jesus Cristo, o Filho de Deus — Lucas 1:31-33",
+            question = "Who is the King of God's Kingdom?",
+            response = "Jesus Christ, the Son of God — Luke 1:31-33",
             showQuestionClear = false,
             showResponseClear = false,
             orderIndex = 1,
