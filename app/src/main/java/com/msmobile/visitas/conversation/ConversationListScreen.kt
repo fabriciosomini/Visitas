@@ -239,7 +239,7 @@ private fun ConversationCard(
 internal fun ConversationListScreenPreview(
     @PreviewParameter(PreviewConfigProvider::class) config: PreviewConfig
 ) {
-    VisitasTheme {
+    VisitasTheme(config.isDarkMode) {
         AppScaffold(
             uiState = previewMainActivityUiState,
             currentDestination = ConversationListScreenDestination,
@@ -257,56 +257,6 @@ internal fun ConversationListScreenPreview(
     }
 }
 
-private val previewMainActivityUiState = MainActivityViewModel.UiState(
-    scaffoldState = MainActivityViewModel.ScaffoldState(
-        showBottomBar = true,
-        showFAB = true
-    ),
-    eventState = MainActivityViewModel.UiEventState.Idle,
-    intentState = IntentState.None
-)
-
-private val previewConversationUiState = ConversationListViewModel.UiState(
-    conversations = listOf(
-        ConversationListViewModel.ConversationState(
-            conversationId = UUID.randomUUID(),
-            parentId = UUID.randomUUID(),
-            question = "O que o Reino de Deus vai fazer por nós?",
-            hide = false
-        ),
-        ConversationListViewModel.ConversationState(
-            conversationId = UUID.randomUUID(),
-            parentId = UUID.randomUUID(),
-            question = "Deus ouve todas as orações?",
-            hide = false
-        )
-    ),
-    filter = ConversationListViewModel.ConversationFilter(search = "")
-)
-
-@VisibleForTesting
-internal class PreviewConfigProvider : PreviewParameterProvider<PreviewConfig> {
-    override val values: Sequence<PreviewConfig> = sequenceOf(
-        PreviewConfig(
-            conversationUiState = previewConversationUiState
-        ),
-        PreviewConfig(
-            conversationUiState = previewConversationUiState.copy(
-                conversations = emptyList()
-            )
-        ),
-        PreviewConfig(
-            conversationUiState = previewConversationUiState.copy(
-                filter = previewConversationUiState.filter.copy(search = "Deus")
-            )
-        )
-    )
-}
-
-@VisibleForTesting
-internal data class PreviewConfig(
-    val conversationUiState: ConversationListViewModel.UiState
-)
 
 private fun PaddingValues.calculateListBottomPadding(): Dp {
     val bottomPadding = calculateBottomPadding()
