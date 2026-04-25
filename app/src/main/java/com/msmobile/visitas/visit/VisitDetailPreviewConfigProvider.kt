@@ -15,7 +15,7 @@ private val previewDate2 = previewDate1.plusWeeks(1)
 @VisibleForTesting
 internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPreviewConfig> {
 
-    private val previewConfigLight = sequenceOf(
+    override val values: Sequence<VisitDetailPreviewConfig> = sequenceOf(
         VisitDetailPreviewConfig(
             configName = "New Visit",
             mainActivityUiState = previewMainActivityUiState,
@@ -115,7 +115,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Morador receptivo, prefere visitas pela manhã. Tem interesse em estudar a Bíblia.",
+                    notes = "Receptive householder, prefers morning visits. Interested in studying the Bible.",
                     showClearNotes = true,
                     isNotesExpanded = true
                 ),
@@ -129,7 +129,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Morador receptivo, prefere visitas pela manhã. Tem interesse em estudar a Bíblia.",
+                    notes = "Receptive householder, prefers morning visits. Interested in studying the Bible.",
                     showClearNotes = false,
                     isNotesExpanded = true
                 ),
@@ -143,7 +143,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Morador receptivo, prefere visitas pela manhã.\nTem interesse em estudar a Bíblia.",
+                    notes = "Receptive householder, prefers morning visits.\nInterested in studying the Bible.",
                     showClearNotes = false,
                     isNotesExpanded = false
                 ),
@@ -152,15 +152,6 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             isDarkMode = false
         ),
     )
-
-    private val previewConfigDark = previewConfigLight.map { config ->
-        config.copy(
-            configName = "${config.configName} - Dark Mode",
-            isDarkMode = true
-        )
-    }
-
-    override val values: Sequence<VisitDetailPreviewConfig> = previewConfigLight + previewConfigDark
 
     override fun getDisplayName(index: Int): String {
         return values.elementAt(index).configName
@@ -211,7 +202,7 @@ private val previewNewVisitUiState = VisitDetailViewModel.VisitState(
 
 private val previewFirstVisitUiState = VisitDetailViewModel.VisitState(
     id = UUID.randomUUID(),
-    subject = "O que é o Reino de Deus?",
+    subject = "What is God's Kingdom?",
     date = previewDate1,
     isDone = true,
     householderId = UUID.randomUUID(),
@@ -235,7 +226,7 @@ private val previewFirstVisitUiState = VisitDetailViewModel.VisitState(
 
 private val previewReturnVisit = VisitDetailViewModel.VisitState(
     id = UUID.randomUUID(),
-    subject = "Quem é o Rei do Reino de Deus?",
+    subject = "Who is the King of God's Kingdom?",
     date = previewDate2,
     isDone = false,
     householderId = UUID.randomUUID(),
@@ -269,9 +260,9 @@ private val previewConversationSuggestion = VisitDetailViewModel.ConversationSta
 private val previewVisitDetailUiState = VisitDetailViewModel.UiState(
     householder = VisitDetailViewModel.HouseholderState(
         id = UUID.randomUUID(),
-        name = "Pedro",
-        address = "Rua 1",
-        notes = "Morador receptivo",
+    name = "Pedro",
+    address = "Rua 1",
+    notes = "Receptive householder",
         showClearName = true,
         addressState = VisitDetailViewModel.HouseholderAddressState.LoadLocation,
         showClearNotes = false,

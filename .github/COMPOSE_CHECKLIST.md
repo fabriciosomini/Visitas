@@ -27,7 +27,7 @@ Use this checklist when reviewing or authoring Compose screens in this project.
 - [ ] **`collectAsStateWithLifecycle()` used** — Never use `collectAsState()` without lifecycle awareness.
 - [ ] **All strings via `stringResource`** — No hardcoded string literals in composables.
 - [ ] **`key` provided in `LazyColumn` / `LazyRow` items** — Always supply a stable, unique key to prevent incorrect recomposition on list changes.
-- [ ] **`@PreviewParameter` used for preview variants** — Avoids duplicating multiple `@Preview` functions with slightly different state.
+- [ ] **`@PreviewParameter` used for preview variants** — Avoids duplicating multiple `@PreviewPhone` functions with slightly different state.
 - [ ] **No logic in composable layer** — Derived values, null checks used to drive UI flags (e.g. `showDeleteButton`) should come from `UiState`, not be computed inline in the composable.
 
 ---

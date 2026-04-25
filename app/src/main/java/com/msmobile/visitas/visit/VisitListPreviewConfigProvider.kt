@@ -15,28 +15,24 @@ private val previewDate3 = previewDate1.plusWeeks(2)
 
 @VisibleForTesting
 internal class VisitListPreviewConfigProvider : PreviewParameterProvider<VisitListPreviewConfig> {
-
-    private val previewConfigLight = sequenceOf(
+    override val values: Sequence<VisitListPreviewConfig> = sequenceOf(
         VisitListPreviewConfig(
             configName = "Summary details collapsed",
             mainActivityUiState = previewMainActivityUiState,
             summaryUiState = previewSummaryUiState,
-            visitListUiState = previewVisitListUiState,
-            isDarkMode = false
+            visitListUiState = previewVisitListUiState
         ),
         VisitListPreviewConfig(
             configName = "Summary details expanded",
             mainActivityUiState = previewMainActivityUiState,
             summaryUiState = previewSummaryUiState.copy(shouldShowSummaryDetails = true),
-            visitListUiState = previewVisitListUiState,
-            isDarkMode = false
+            visitListUiState = previewVisitListUiState
         ),
         VisitListPreviewConfig(
             configName = "Loading visits",
             mainActivityUiState = previewMainActivityUiState,
             summaryUiState = previewSummaryUiState,
-            visitListUiState = previewVisitListUiState.copy(isLoadingVisits = true),
-            isDarkMode = false
+            visitListUiState = previewVisitListUiState.copy(isLoadingVisits = true)
         ),
         VisitListPreviewConfig(
             configName = "Filtering visits",
@@ -44,9 +40,8 @@ internal class VisitListPreviewConfigProvider : PreviewParameterProvider<VisitLi
             summaryUiState = previewSummaryUiState,
             visitListUiState = previewVisitListUiState.copy(
                 visitList = emptyList(),
-                filter = previewVisitListUiState.filter.copy(search = "John")
-            ),
-            isDarkMode = false
+                filter = previewVisitListUiState.filter.copy(search = "Mary")
+            )
         ),
         VisitListPreviewConfig(
             configName = "Location rationale",
@@ -54,19 +49,9 @@ internal class VisitListPreviewConfigProvider : PreviewParameterProvider<VisitLi
             summaryUiState = previewSummaryUiState,
             visitListUiState = previewVisitListUiState.copy(
                 showLocationRationale = true
-            ),
-            isDarkMode = false
+            )
         )
     )
-
-    private val previewConfigDark = previewConfigLight.map { config ->
-        config.copy(
-            configName = "${config.configName} - Dark Mode",
-            isDarkMode = true
-        )
-    }
-
-    override val values: Sequence<VisitListPreviewConfig> = previewConfigLight + previewConfigDark
 
     override fun getDisplayName(index: Int): String {
         return values.elementAt(index).configName
@@ -78,8 +63,7 @@ internal data class VisitListPreviewConfig(
     val configName: String,
     val mainActivityUiState: MainActivityViewModel.UiState,
     val summaryUiState: SummaryViewModel.UiState,
-    val visitListUiState: VisitListViewModel.UiState,
-    val isDarkMode: Boolean
+    val visitListUiState: VisitListViewModel.UiState
 )
 
 private val previewMainActivityUiState = MainActivityViewModel.UiState(
@@ -104,15 +88,15 @@ private val previewVisitListUiState = VisitListViewModel.UiState(
     visitList = listOf(
         VisitListViewModel.VisitHouseholderState(
             householderId = UUID.randomUUID(),
-            householderName = "John Doe",
-            householderAddress = "542 Ninth Boulevard, NY Center - Next to the train station",
+            householderName = "Mary Magdalene",
+            householderAddress = "12 Olive Tree Street - Near the Garden of Gethsemane",
             householderAddressDistance = AddressProvider.AddressDistance.Nearby(100f),
             date = previewDate1,
             isDone = false,
             hasToBeRescheduled = false,
             isPendingVisitMenuExpanded = false,
-            subject = "Subject",
-            subjectPreview = "Subject preview",
+            subject = "What is God's Kingdom?",
+            subjectPreview = "What is God's Kingdom? — Daniel 2:44",
             hide = false,
             visitId = UUID.randomUUID(),
             type = VisitType.FIRST_VISIT,
@@ -121,37 +105,37 @@ private val previewVisitListUiState = VisitListViewModel.UiState(
         ),
         VisitListViewModel.VisitHouseholderState(
             householderId = UUID.randomUUID(),
-            householderName = "Jane Doe",
-            householderAddress = "123 Main St",
+            householderName = "Joseph of Arimathea",
+            householderAddress = "45 Cedar Avenue",
             date = previewDate2,
             isDone = false,
             hasToBeRescheduled = true,
             isPendingVisitMenuExpanded = false,
-            subjectPreview = "Subject preview",
+            subjectPreview = "The resurrection of the dead — John 5:28, 29",
             hide = false,
             visitId = UUID.randomUUID(),
             type = VisitType.FIRST_VISIT,
             householderLatitude = 0.0,
             householderLongitude = 0.0,
             householderAddressDistance = AddressProvider.AddressDistance.FarAway(600f),
-            subject = "Subject"
+            subject = "The resurrection of the dead"
         ),
         VisitListViewModel.VisitHouseholderState(
             householderId = UUID.randomUUID(),
-            householderName = "Peter Doe",
-            householderAddress = "123 Main St",
+            householderName = "Nicodemus",
+            householderAddress = "7 Pharisee Street",
             date = previewDate3,
             isDone = false,
             hasToBeRescheduled = false,
             isPendingVisitMenuExpanded = false,
-            subjectPreview = "Subject preview",
+            subjectPreview = "Who is Jesus Christ? — Luke 1:31-33",
             hide = false,
             visitId = UUID.randomUUID(),
             type = VisitType.FIRST_VISIT,
             householderLatitude = 0.0,
             householderLongitude = 0.0,
             householderAddressDistance = AddressProvider.AddressDistance.NoData,
-            subject = "Subject"
+            subject = "Who is Jesus Christ?"
         ),
     ),
     selectedTabIndex = 0,

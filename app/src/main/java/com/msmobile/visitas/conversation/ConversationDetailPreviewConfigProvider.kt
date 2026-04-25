@@ -11,20 +11,18 @@ import java.util.UUID
 internal class ConversationDetailPreviewConfigProvider :
     PreviewParameterProvider<ConversationDetailPreviewConfig> {
 
-    private val previewConfigLight = sequenceOf(
+    override val values: Sequence<ConversationDetailPreviewConfig> =  sequenceOf(
         ConversationDetailPreviewConfig(
             configName = "With Delete Button",
             mainActivityUiState = previewMainActivityUiState,
             showDeleteButton = true,
-            uiState = previewConversationDetailUiState,
-            isDarkMode = false
+            uiState = previewConversationDetailUiState
         ),
         ConversationDetailPreviewConfig(
             configName = "Without Delete Button",
             mainActivityUiState = previewMainActivityUiState,
             showDeleteButton = false,
-            uiState = previewConversationDetailUiState,
-            isDarkMode = false
+            uiState = previewConversationDetailUiState
         ),
         ConversationDetailPreviewConfig(
             configName = "Single Conversation",
@@ -34,8 +32,7 @@ internal class ConversationDetailPreviewConfigProvider :
                 conversationList = listOf(
                     previewConversationDetailUiState.conversationList.first()
                 )
-            ),
-            isDarkMode = false
+            )
         ),
         ConversationDetailPreviewConfig(
             configName = "Multiple Conversations",
@@ -45,8 +42,8 @@ internal class ConversationDetailPreviewConfigProvider :
                 conversationList = previewConversationDetailUiState.conversationList + listOf(
                     ConversationState(
                         id = UUID.randomUUID(),
-                        question = "Where do you live?",
-                        response = "I live in New York",
+                        question = "What does the Bible say about the resurrection?",
+                        response = "The dead will be resurrected — John 5:28, 29",
                         showQuestionClear = false,
                         showResponseClear = false,
                         orderIndex = 2,
@@ -55,19 +52,9 @@ internal class ConversationDetailPreviewConfigProvider :
                         wasRemoved = false
                     )
                 )
-            ),
-            isDarkMode = false
+            )
         )
     )
-
-    private val previewConfigDark = previewConfigLight.map { config ->
-        config.copy(
-            configName = "${config.configName} - Dark Mode",
-            isDarkMode = true
-        )
-    }
-
-    override val values: Sequence<ConversationDetailPreviewConfig> = previewConfigLight + previewConfigDark
 
     override fun getDisplayName(index: Int): String? {
         return values.elementAt(index).configName
@@ -79,8 +66,7 @@ internal data class ConversationDetailPreviewConfig(
     val configName: String,
     val mainActivityUiState: MainActivityViewModel.UiState,
     val showDeleteButton: Boolean,
-    val uiState: ConversationDetailViewModel.UiState,
-    val isDarkMode: Boolean
+    val uiState: ConversationDetailViewModel.UiState
 )
 
 private val previewMainActivityUiState = MainActivityViewModel.UiState(
@@ -96,8 +82,8 @@ private val previewConversationDetailUiState = ConversationDetailViewModel.UiSta
     conversationList = listOf(
         ConversationState(
             id = UUID.randomUUID(),
-            question = "What's your name?",
-            response = "My name is John",
+            question = "What is God's Kingdom?",
+            response = "It is God's heavenly government through Jesus Christ — Daniel 2:44",
             showQuestionClear = true,
             showResponseClear = false,
             orderIndex = 0,
@@ -107,8 +93,8 @@ private val previewConversationDetailUiState = ConversationDetailViewModel.UiSta
         ),
         ConversationState(
             id = UUID.randomUUID(),
-            question = "What's your age?",
-            response = "I'm 25 years old",
+            question = "Who is the King of God's Kingdom?",
+            response = "Jesus Christ, the Son of God — Luke 1:31-33",
             showQuestionClear = false,
             showResponseClear = false,
             orderIndex = 1,

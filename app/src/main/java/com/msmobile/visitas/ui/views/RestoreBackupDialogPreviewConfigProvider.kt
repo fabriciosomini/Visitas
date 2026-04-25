@@ -5,22 +5,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 @VisibleForTesting
 internal class RestoreBackupDialogPreviewConfigProvider : PreviewParameterProvider<RestoreBackupDialogPreviewConfig> {
-
-    private val previewConfigLight = sequenceOf(
+    override val values: Sequence<RestoreBackupDialogPreviewConfig> = sequenceOf(
         RestoreBackupDialogPreviewConfig(
-            configName = "Default",
-            isDarkMode = false
+            configName = "Default"
         )
     )
-
-    private val previewConfigDark = previewConfigLight.map { config ->
-        config.copy(
-            configName = "${config.configName} - Dark Mode",
-            isDarkMode = true
-        )
-    }
-
-    override val values: Sequence<RestoreBackupDialogPreviewConfig> = previewConfigLight + previewConfigDark
 
     override fun getDisplayName(index: Int): String {
         return values.elementAt(index).configName
@@ -29,7 +18,6 @@ internal class RestoreBackupDialogPreviewConfigProvider : PreviewParameterProvid
 
 @VisibleForTesting
 internal data class RestoreBackupDialogPreviewConfig(
-    val configName: String,
-    val isDarkMode: Boolean
+    val configName: String
 )
 

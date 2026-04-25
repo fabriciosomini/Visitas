@@ -92,6 +92,8 @@ import com.msmobile.visitas.extension.stringResource
 import com.msmobile.visitas.extension.textField
 import com.msmobile.visitas.extension.toString
 import com.msmobile.visitas.ui.icons.CopyDataIcon
+import com.msmobile.visitas.ui.theme.PreviewFoldable
+import com.msmobile.visitas.ui.theme.PreviewPhone
 import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.ui.views.DateTimePicker
 import com.msmobile.visitas.ui.views.DetailFooter
@@ -1086,12 +1088,13 @@ private fun NextVisitSuggestionButton(show: Boolean, onClick: () -> Unit) {
 }
 
 @VisibleForTesting
-@Preview
+@PreviewPhone
+@PreviewFoldable
 @Composable
 internal fun VisitDetailScreenPreview(
     @PreviewParameter(VisitDetailPreviewConfigProvider::class) config: VisitDetailPreviewConfig
 ) {
-    VisitasTheme(config.isDarkMode) {
+    VisitasTheme {
         AppScaffold(
             uiState = config.mainActivityUiState,
             currentDestination = VisitDetailScreenDestination,

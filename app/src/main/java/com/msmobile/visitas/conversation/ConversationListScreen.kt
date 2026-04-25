@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.msmobile.visitas.ui.theme.PreviewFoldable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -37,6 +38,7 @@ import com.msmobile.visitas.MainActivityViewModel
 import com.msmobile.visitas.OnScaffoldConfigurationChanged
 import com.msmobile.visitas.R
 import com.msmobile.visitas.extension.OnBackPressed
+import com.msmobile.visitas.ui.theme.PreviewPhone
 import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.ui.views.LazyColumnWithScrollbar
 import com.msmobile.visitas.ui.views.SimpleSearchBar
@@ -234,14 +236,15 @@ private fun ConversationCard(
 }
 
 @VisibleForTesting
-@Preview
+@PreviewPhone
+@PreviewFoldable
 @Composable
 internal fun ConversationListScreenPreview(
     @PreviewParameter(PreviewConfigProvider::class) config: PreviewConfig
 ) {
     VisitasTheme {
         AppScaffold(
-            uiState = previewMainActivityUiState,
+            uiState = config.mainActivityUiState,
             currentDestination = ConversationListScreenDestination,
             onEvent = {},
             onNavigateToTab = {},
@@ -257,56 +260,6 @@ internal fun ConversationListScreenPreview(
     }
 }
 
-private val previewMainActivityUiState = MainActivityViewModel.UiState(
-    scaffoldState = MainActivityViewModel.ScaffoldState(
-        showBottomBar = true,
-        showFAB = true
-    ),
-    eventState = MainActivityViewModel.UiEventState.Idle,
-    intentState = IntentState.None
-)
-
-private val previewConversationUiState = ConversationListViewModel.UiState(
-    conversations = listOf(
-        ConversationListViewModel.ConversationState(
-            conversationId = UUID.randomUUID(),
-            parentId = UUID.randomUUID(),
-            question = "O que o Reino de Deus vai fazer por nós?",
-            hide = false
-        ),
-        ConversationListViewModel.ConversationState(
-            conversationId = UUID.randomUUID(),
-            parentId = UUID.randomUUID(),
-            question = "Deus ouve todas as orações?",
-            hide = false
-        )
-    ),
-    filter = ConversationListViewModel.ConversationFilter(search = "")
-)
-
-@VisibleForTesting
-internal class PreviewConfigProvider : PreviewParameterProvider<PreviewConfig> {
-    override val values: Sequence<PreviewConfig> = sequenceOf(
-        PreviewConfig(
-            conversationUiState = previewConversationUiState
-        ),
-        PreviewConfig(
-            conversationUiState = previewConversationUiState.copy(
-                conversations = emptyList()
-            )
-        ),
-        PreviewConfig(
-            conversationUiState = previewConversationUiState.copy(
-                filter = previewConversationUiState.filter.copy(search = "Deus")
-            )
-        )
-    )
-}
-
-@VisibleForTesting
-internal data class PreviewConfig(
-    val conversationUiState: ConversationListViewModel.UiState
-)
 
 private fun PaddingValues.calculateListBottomPadding(): Dp {
     val bottomPadding = calculateBottomPadding()
