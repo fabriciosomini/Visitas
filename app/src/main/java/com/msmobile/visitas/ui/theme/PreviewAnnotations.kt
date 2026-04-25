@@ -4,24 +4,24 @@ import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Preview
 
 @Preview(
-    name = "Foldable Light",
+    name = "Foldable",
     device = "spec:parent=pixel_9_pro_fold,orientation=landscape",
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Preview(
-    name = "Foldable Dark",
+    name = "Foldable",
     device = "spec:parent=pixel_9_pro_fold,orientation=landscape",
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 annotation class PreviewFoldable
 
 @Preview(
-    name = "Phone Light",
+    name = "Phone",
     device = "id:pixel_9",
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Preview(
-    name = "Phone Dark",
+    name = "Phone",
     device = "id:pixel_9",
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
