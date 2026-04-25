@@ -115,7 +115,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Receptive resident, prefers morning visits. Interested in studying the Bible.",
+                    notes = "Receptive householder, prefers morning visits. Interested in studying the Bible.",
                     showClearNotes = true,
                     isNotesExpanded = true
                 ),
@@ -129,7 +129,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Receptive resident, prefers morning visits. Interested in studying the Bible.",
+                    notes = "Receptive householder, prefers morning visits. Interested in studying the Bible.",
                     showClearNotes = false,
                     isNotesExpanded = true
                 ),
@@ -143,7 +143,7 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             householderId = UUID.randomUUID(),
             uiState = previewVisitDetailUiState.copy(
                 householder = previewVisitDetailUiState.householder.copy(
-                    notes = "Receptive resident, prefers morning visits.\nInterested in studying the Bible.",
+                    notes = "Receptive householder, prefers morning visits.\nInterested in studying the Bible.",
                     showClearNotes = false,
                     isNotesExpanded = false
                 ),
@@ -271,7 +271,7 @@ private val previewVisitDetailUiState = VisitDetailViewModel.UiState(
         id = UUID.randomUUID(),
     name = "Pedro",
     address = "Rua 1",
-    notes = "Receptive resident",
+    notes = "Receptive householder",
         showClearName = true,
         addressState = VisitDetailViewModel.HouseholderAddressState.LoadLocation,
         showClearNotes = false,
