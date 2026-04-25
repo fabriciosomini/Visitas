@@ -8,40 +8,27 @@ import java.util.UUID
 
 @VisibleForTesting
 internal class PreviewConfigProvider : PreviewParameterProvider<PreviewConfig> {
-
-    private val previewConfigLight = sequenceOf(
+    override val values: Sequence<PreviewConfig> = sequenceOf(
         PreviewConfig(
             configName = "Conversation list",
             mainActivityUiState = previewMainActivityUiState,
-            conversationUiState = previewConversationUiState,
-            isDarkMode = false
+            conversationUiState = previewConversationUiState
         ),
         PreviewConfig(
             configName = "Empty list",
             mainActivityUiState = previewMainActivityUiState,
             conversationUiState = previewConversationUiState.copy(
                 conversations = emptyList()
-            ),
-            isDarkMode = false
+            )
         ),
         PreviewConfig(
             configName = "Filtering conversations",
             mainActivityUiState = previewMainActivityUiState,
             conversationUiState = previewConversationUiState.copy(
                 filter = previewConversationUiState.filter.copy(search = "God")
-            ),
-            isDarkMode = false
+            )
         )
     )
-
-    private val previewConfigDark = previewConfigLight.map { config ->
-        config.copy(
-            configName = "${config.configName} - Dark Mode",
-            isDarkMode = true
-        )
-    }
-
-    override val values: Sequence<PreviewConfig> = previewConfigLight + previewConfigDark
 
     override fun getDisplayName(index: Int): String {
         return values.elementAt(index).configName
@@ -52,8 +39,7 @@ internal class PreviewConfigProvider : PreviewParameterProvider<PreviewConfig> {
 internal data class PreviewConfig(
     val configName: String,
     val mainActivityUiState: MainActivityViewModel.UiState,
-    val conversationUiState: ConversationListViewModel.UiState,
-    val isDarkMode: Boolean
+    val conversationUiState: ConversationListViewModel.UiState
 )
 
 private val previewMainActivityUiState = MainActivityViewModel.UiState(

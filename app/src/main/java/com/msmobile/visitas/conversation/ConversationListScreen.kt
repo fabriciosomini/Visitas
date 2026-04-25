@@ -38,6 +38,7 @@ import com.msmobile.visitas.MainActivityViewModel
 import com.msmobile.visitas.OnScaffoldConfigurationChanged
 import com.msmobile.visitas.R
 import com.msmobile.visitas.extension.OnBackPressed
+import com.msmobile.visitas.ui.theme.PreviewPhone
 import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.ui.views.LazyColumnWithScrollbar
 import com.msmobile.visitas.ui.views.SimpleSearchBar
@@ -235,13 +236,13 @@ private fun ConversationCard(
 }
 
 @VisibleForTesting
-@Preview
+@PreviewPhone
 @PreviewFoldable
 @Composable
 internal fun ConversationListScreenPreview(
     @PreviewParameter(PreviewConfigProvider::class) config: PreviewConfig
 ) {
-    VisitasTheme(config.isDarkMode) {
+    VisitasTheme {
         AppScaffold(
             uiState = config.mainActivityUiState,
             currentDestination = ConversationListScreenDestination,

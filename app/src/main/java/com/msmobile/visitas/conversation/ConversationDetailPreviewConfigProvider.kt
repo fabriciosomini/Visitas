@@ -11,20 +11,18 @@ import java.util.UUID
 internal class ConversationDetailPreviewConfigProvider :
     PreviewParameterProvider<ConversationDetailPreviewConfig> {
 
-    private val previewConfigLight = sequenceOf(
+    override val values: Sequence<ConversationDetailPreviewConfig> =  sequenceOf(
         ConversationDetailPreviewConfig(
             configName = "With Delete Button",
             mainActivityUiState = previewMainActivityUiState,
             showDeleteButton = true,
-            uiState = previewConversationDetailUiState,
-            isDarkMode = false
+            uiState = previewConversationDetailUiState
         ),
         ConversationDetailPreviewConfig(
             configName = "Without Delete Button",
             mainActivityUiState = previewMainActivityUiState,
             showDeleteButton = false,
-            uiState = previewConversationDetailUiState,
-            isDarkMode = false
+            uiState = previewConversationDetailUiState
         ),
         ConversationDetailPreviewConfig(
             configName = "Single Conversation",
@@ -34,8 +32,7 @@ internal class ConversationDetailPreviewConfigProvider :
                 conversationList = listOf(
                     previewConversationDetailUiState.conversationList.first()
                 )
-            ),
-            isDarkMode = false
+            )
         ),
         ConversationDetailPreviewConfig(
             configName = "Multiple Conversations",
@@ -55,19 +52,9 @@ internal class ConversationDetailPreviewConfigProvider :
                         wasRemoved = false
                     )
                 )
-            ),
-            isDarkMode = false
+            )
         )
     )
-
-    private val previewConfigDark = previewConfigLight.map { config ->
-        config.copy(
-            configName = "${config.configName} - Dark Mode",
-            isDarkMode = true
-        )
-    }
-
-    override val values: Sequence<ConversationDetailPreviewConfig> = previewConfigLight + previewConfigDark
 
     override fun getDisplayName(index: Int): String? {
         return values.elementAt(index).configName
@@ -79,8 +66,7 @@ internal data class ConversationDetailPreviewConfig(
     val configName: String,
     val mainActivityUiState: MainActivityViewModel.UiState,
     val showDeleteButton: Boolean,
-    val uiState: ConversationDetailViewModel.UiState,
-    val isDarkMode: Boolean
+    val uiState: ConversationDetailViewModel.UiState
 )
 
 private val previewMainActivityUiState = MainActivityViewModel.UiState(

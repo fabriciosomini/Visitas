@@ -15,7 +15,7 @@ private val previewDate2 = previewDate1.plusWeeks(1)
 @VisibleForTesting
 internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<VisitDetailPreviewConfig> {
 
-    private val previewConfigLight = sequenceOf(
+    override val values: Sequence<VisitDetailPreviewConfig> = sequenceOf(
         VisitDetailPreviewConfig(
             configName = "New Visit",
             mainActivityUiState = previewMainActivityUiState,
@@ -152,15 +152,6 @@ internal class VisitDetailPreviewConfigProvider : PreviewParameterProvider<Visit
             isDarkMode = false
         ),
     )
-
-    private val previewConfigDark = previewConfigLight.map { config ->
-        config.copy(
-            configName = "${config.configName} - Dark Mode",
-            isDarkMode = true
-        )
-    }
-
-    override val values: Sequence<VisitDetailPreviewConfig> = previewConfigLight + previewConfigDark
 
     override fun getDisplayName(index: Int): String {
         return values.elementAt(index).configName

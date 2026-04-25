@@ -9,7 +9,7 @@ import com.ramcosta.composedestinations.spec.DestinationSpec
 @VisibleForTesting
 internal class AppScaffoldPreviewConfigProvider : PreviewParameterProvider<AppScaffoldPreviewConfig> {
 
-    private val previewConfigLight = sequenceOf(
+    override val values: Sequence<AppScaffoldPreviewConfig> = sequenceOf(
         AppScaffoldPreviewConfig(
             configName = "With Bottom Bar and FAB",
             uiState = MainActivityViewModel.UiState(
@@ -20,8 +20,7 @@ internal class AppScaffoldPreviewConfigProvider : PreviewParameterProvider<AppSc
                 eventState = MainActivityViewModel.UiEventState.Idle,
                 intentState = IntentState.None
             ),
-            currentDestination = VisitListScreenDestination,
-            isDarkMode = false
+            currentDestination = VisitListScreenDestination
         ),
         AppScaffoldPreviewConfig(
             configName = "Without Bottom Bar and FAB",
@@ -33,19 +32,9 @@ internal class AppScaffoldPreviewConfigProvider : PreviewParameterProvider<AppSc
                 eventState = MainActivityViewModel.UiEventState.Idle,
                 intentState = IntentState.None
             ),
-            currentDestination = VisitListScreenDestination,
-            isDarkMode = false
+            currentDestination = VisitListScreenDestination
         )
     )
-
-    private val previewConfigDark = previewConfigLight.map { config ->
-        config.copy(
-            configName = "${config.configName} - Dark Mode",
-            isDarkMode = true
-        )
-    }
-
-    override val values: Sequence<AppScaffoldPreviewConfig> = previewConfigLight + previewConfigDark
 
     override fun getDisplayName(index: Int): String {
         return values.elementAt(index).configName
@@ -56,7 +45,6 @@ internal class AppScaffoldPreviewConfigProvider : PreviewParameterProvider<AppSc
 internal data class AppScaffoldPreviewConfig(
     val configName: String,
     val uiState: MainActivityViewModel.UiState,
-    val currentDestination: DestinationSpec,
-    val isDarkMode: Boolean
+    val currentDestination: DestinationSpec
 )
 

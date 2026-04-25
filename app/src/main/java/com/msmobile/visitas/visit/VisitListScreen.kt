@@ -93,6 +93,7 @@ import com.msmobile.visitas.extension.toString
 import com.msmobile.visitas.extension.tonalButtonColors
 import com.msmobile.visitas.summary.SummaryViewModel
 import com.msmobile.visitas.ui.theme.PreviewFoldable
+import com.msmobile.visitas.ui.theme.PreviewPhone
 import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.ui.views.MonthNavigator
 import com.msmobile.visitas.ui.views.MonthNavigatorEvent
@@ -1009,13 +1010,13 @@ private fun VisitMapErrorState() {
 }
 
 @VisibleForTesting
-@Preview
+@PreviewPhone
 @PreviewFoldable
 @Composable
 internal fun VisitListScreenPreview(
     @PreviewParameter(VisitListPreviewConfigProvider::class) config: VisitListPreviewConfig
 ) {
-    VisitasTheme(config.isDarkMode) {
+    VisitasTheme {
         AppScaffold(
             uiState = config.mainActivityUiState,
             currentDestination = VisitListScreenDestination,

@@ -51,6 +51,7 @@ import com.msmobile.visitas.extension.removeBottomCorner
 import com.msmobile.visitas.extension.removeTopCorner
 import com.msmobile.visitas.extension.textField
 import com.msmobile.visitas.ui.theme.PreviewFoldable
+import com.msmobile.visitas.ui.theme.PreviewPhone
 import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.msmobile.visitas.ui.views.DetailFooter
 import com.msmobile.visitas.ui.views.LazyColumnWithScrollbar
@@ -353,13 +354,13 @@ private fun StateHandler(
 }
 
 @VisibleForTesting
-@Preview
+@PreviewPhone
 @PreviewFoldable
 @Composable
 internal fun ConversationDetailScreenPreview(
     @PreviewParameter(ConversationDetailPreviewConfigProvider::class) config: ConversationDetailPreviewConfig
 ) {
-    VisitasTheme(config.isDarkMode) {
+    VisitasTheme {
         AppScaffold(
             uiState = config.mainActivityUiState,
             currentDestination = VisitDetailScreenDestination,
