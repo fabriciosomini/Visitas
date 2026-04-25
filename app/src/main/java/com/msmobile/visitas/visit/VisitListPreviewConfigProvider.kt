@@ -138,7 +138,7 @@ private val previewVisitListUiState = VisitListViewModel.UiState(
         ),
         VisitListViewModel.VisitHouseholderState(
             householderId = UUID.randomUUID(),
-            householderName = "Nicodemus Silva",
+            householderName = "Nicodemus",
             householderAddress = "7 Pharisee Street",
             date = previewDate3,
             isDone = false,
