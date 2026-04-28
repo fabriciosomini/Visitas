@@ -1,23 +1,25 @@
 package com.msmobile.visitas.ui.views
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults.iconButtonColors
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.msmobile.visitas.R
+import com.msmobile.visitas.ui.theme.PreviewFoldable
+import com.msmobile.visitas.ui.theme.PreviewPhone
+import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.ramcosta.composedestinations.generated.destinations.ConversationListScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.VisitListScreenDestination
 import com.ramcosta.composedestinations.spec.DestinationSpec
@@ -29,23 +31,22 @@ fun BottomNavigation(
     onNavigateToTab: (DirectionDestinationSpec) -> Unit
 ) {
     var activeTab by remember { mutableStateOf(currentDestination) }
-    NavigationBar(
-        containerColor = lerp(
-            MaterialTheme.colorScheme.secondaryContainer,
-            MaterialTheme.colorScheme.surfaceContainerLow,
-            0.7f
-        ),
-    ) {
-        BottomNavigationTab.entries.forEach { tab ->
-            NavigationBarItem(
-                icon = { Icon(tab.icon, contentDescription = stringResource(id = tab.textId)) },
-                label = { Text(stringResource(id = tab.textId)) },
-                selected = activeTab == tab.destination,
+    Row {
+        BottomNavigationTab.entries.map { tab ->
+            IconButton(
+                colors = if (activeTab == tab.destination) {
+                    iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                } else {
+                    iconButtonColors(contentColor = MaterialTheme.colorScheme.onSurfaceVariant)
+                },
                 onClick = {
                     if (currentDestination != tab.destination) {
                         onNavigateToTab(tab.destination)
                         activeTab = tab.destination
                     }
+                },
+                content = {
+                    Icon(tab.icon, contentDescription = stringResource(id = tab.textId))
                 }
             )
         }
@@ -63,4 +64,16 @@ private enum class BottomNavigationTab(
         Icons.AutoMirrored.Default.MenuBook,
         R.string.conversations
     ),
+}
+
+@Composable
+@PreviewPhone
+@PreviewFoldable
+private fun BottomNavigationPreview() {
+    VisitasTheme {
+        BottomNavigation(
+            currentDestination = VisitListScreenDestination,
+            onNavigateToTab = {}
+        )
+    }
 }
