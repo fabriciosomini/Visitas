@@ -41,13 +41,6 @@ fun DetailFooter(
             },
             content = {
                 Row {
-                    IconButton(onClick = onCancelClickedEvent) {
-                        Icon(
-                            imageVector = Icons.Rounded.ArrowBackIosNew,
-                            contentDescription = stringResource(id = R.string.cancel)
-                        )
-                    }
-
                     if (showDeleteButton) {
                         IconButton(onClick = onDeleteClicked) {
                             Icon(
@@ -55,6 +48,13 @@ fun DetailFooter(
                                 contentDescription = stringResource(id = R.string.delete)
                             )
                         }
+                    }
+
+                    IconButton(onClick = onCancelClickedEvent) {
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowBackIosNew,
+                            contentDescription = stringResource(id = R.string.cancel)
+                        )
                     }
 
                     extraButtons()
