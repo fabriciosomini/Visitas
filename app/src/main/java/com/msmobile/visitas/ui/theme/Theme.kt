@@ -56,11 +56,7 @@ fun VisitasTheme(
                         surfaceVariant = DarkGrey,
                         background = Color.Black,
                         error = DarkRed,
-                        surfaceContainer = lerp(
-                            Color.Black,
-                            scheme.surfaceContainerLow,
-                            0.65f
-                        )
+                        surfaceContainer = DarkGrey2
                     )
                 }
             } else {
