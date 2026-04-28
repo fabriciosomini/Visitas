@@ -27,7 +27,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.DateRange
@@ -38,7 +37,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -124,7 +123,7 @@ fun VisitDetailScreen(
     LaunchedEffect(key1 = null) {
         scaffoldConfigurationChanged(
             MainActivityViewModel.ScaffoldState(
-                showBottomBar = true,
+                showBottomBar = false,
                 showFAB = false
             )
         )
@@ -132,6 +131,7 @@ fun VisitDetailScreen(
     VisitDetailScreenContent(navigator, householderId, uiState, onEvent)
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun VisitDetailScreenContent(
     navigator: DestinationsNavigator,
@@ -144,53 +144,12 @@ private fun VisitDetailScreenContent(
 
     LaunchedEffect(key1 = null) {
         onEvent(VisitDetailViewModel.UiEvent.ViewCreated(householderId))
-
     }
 
     OnBackPressed {
         onEvent(VisitDetailViewModel.UiEvent.CancelClicked)
     }
-    Scaffold(
-        bottomBar = {
-            Row {
-                Column(
-                    modifier = Modifier
-                        .weight(1f, true)
-                        .background(color = MaterialTheme.colorScheme.surfaceContainer)
-                        .padding(borderPadding)
-                ) {
-                    IconButton(
-                        onClick = {
-                            onEvent(VisitDetailViewModel.UiEvent.CopyVisitDataClicked)
-                        }
-                    ) {
-                        CopyDataIcon()
-                    }
-                }
-                DetailFooter(
-                    modifier = Modifier
-                        .background(color = MaterialTheme.colorScheme.surfaceContainer)
-                        .padding(borderPadding),
-                    showDeleteButton = showDeleteButton,
-                    onSaveClickedEvent = { onEvent(VisitDetailViewModel.UiEvent.SaveClicked) },
-                    onCancelClickedEvent = { onEvent(VisitDetailViewModel.UiEvent.CancelClicked) },
-                    onDeleteClicked = { onEvent(VisitDetailViewModel.UiEvent.DeleteClicked) }
-                )
-            }
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    onEvent(VisitDetailViewModel.UiEvent.AddVisitClicked)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = stringResource(id = R.string.add_visit)
-                )
-            }
-        }
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         val bottomPadding by remember { mutableStateOf(paddingValues.calculateBottomPadding()) }
         VisitDetail(
             bottomPadding = bottomPadding,
@@ -232,6 +191,30 @@ private fun VisitDetailScreenContent(
             }
         )
         StateHandler(uiState = uiState, navigator = navigator, onEvent = onEvent)
+        DetailFooter(
+            showDeleteButton = showDeleteButton,
+            onSaveClickedEvent = {
+                onEvent(VisitDetailViewModel.UiEvent.SaveClicked)
+            },
+            onCancelClickedEvent = {
+                onEvent(VisitDetailViewModel.UiEvent.CancelClicked)
+            },
+            onDeleteClicked = {
+                onEvent(VisitDetailViewModel.UiEvent.DeleteClicked)
+            },
+            onFabClickedEvent = {
+                onEvent(VisitDetailViewModel.UiEvent.AddVisitClicked)
+            },
+            extraButtons = {
+                IconButton(
+                    onClick = {
+                        onEvent(VisitDetailViewModel.UiEvent.CopyVisitDataClicked)
+                    }
+                ) {
+                    CopyDataIcon()
+                }
+            }
+        )
     }
 }
 
