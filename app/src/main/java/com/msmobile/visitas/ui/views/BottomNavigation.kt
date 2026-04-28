@@ -18,6 +18,9 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.msmobile.visitas.R
+import com.msmobile.visitas.ui.theme.PreviewFoldable
+import com.msmobile.visitas.ui.theme.PreviewPhone
+import com.msmobile.visitas.ui.theme.VisitasTheme
 import com.ramcosta.composedestinations.generated.destinations.ConversationListScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.VisitListScreenDestination
 import com.ramcosta.composedestinations.spec.DestinationSpec
@@ -63,4 +66,16 @@ private enum class BottomNavigationTab(
         Icons.AutoMirrored.Default.MenuBook,
         R.string.conversations
     ),
+}
+
+@Composable
+@PreviewPhone
+@PreviewFoldable
+private fun BottomNavigationPreview() {
+    VisitasTheme {
+        BottomNavigation(
+            currentDestination = VisitListScreenDestination,
+            onNavigateToTab = {}
+        )
+    }
 }
