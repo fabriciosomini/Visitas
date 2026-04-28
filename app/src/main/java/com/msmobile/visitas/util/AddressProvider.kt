@@ -251,7 +251,7 @@ class AddressProvider(
     private companion object {
         private const val LOCATION_REQUEST_INTERVAL = 3_000L
         private const val MAX_ADDRESS_RESULTS = 10
-        private const val LOCATION_ACCURACY = 50
+        private const val LOCATION_ACCURACY = 20
         private const val LOCATION_ACCURACY_TOLERANCE = 5
         private const val CLOSE_DISTANCE_IN_METERS = 100.0
         private const val MEDIUM_DISTANCE_IN_METERS = 500.0
