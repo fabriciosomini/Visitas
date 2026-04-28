@@ -82,7 +82,7 @@ fun ConversationDetailScreen(
     LaunchedEffect(key1 = null) {
         scaffoldConfigurationChanged(
             MainActivityViewModel.ScaffoldState(
-                showBottomBar = true,
+                showBottomBar = false,
                 showFAB = false
             )
         )
@@ -106,38 +106,20 @@ private fun ConversationDetailScreenContent(
     onEvent: (ConversationDetailViewModel.UiEvent) -> Unit,
     onNavigateUp: () -> Unit = {}
 ) {
-    Scaffold(
-        bottomBar = {
-            DetailFooter(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.surfaceContainer)
-                    .fillMaxWidth()
-                    .padding(borderPadding),
-                showDeleteButton = showDeleteButton,
-                onSaveClickedEvent = { onEvent(ConversationDetailViewModel.UiEvent.SaveClicked) },
-                onCancelClickedEvent = { onEvent(ConversationDetailViewModel.UiEvent.CancelClicked) },
-                onDeleteClicked = { onEvent(ConversationDetailViewModel.UiEvent.DeleteClicked) }
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    onEvent(ConversationDetailViewModel.UiEvent.AddClicked)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = stringResource(id = R.string.add_conversation)
-                )
-            }
-        }
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         ConversationItems(
             bottomPadding = paddingValues.calculateBottomPadding(),
             uiState = uiState,
             onEvent = onEvent
         )
         StateHandler(uiState, onEvent, onNavigateUp)
+        DetailFooter(
+            showDeleteButton = showDeleteButton,
+            onSaveClickedEvent = { onEvent(ConversationDetailViewModel.UiEvent.SaveClicked) },
+            onCancelClickedEvent = { onEvent(ConversationDetailViewModel.UiEvent.CancelClicked) },
+            onDeleteClicked = { onEvent(ConversationDetailViewModel.UiEvent.DeleteClicked) },
+            onFabClickedEvent = { onEvent(ConversationDetailViewModel.UiEvent.AddClicked) },
+        )
     }
 }
 
@@ -152,9 +134,7 @@ private fun ConversationItems(
     LazyColumnWithScrollbar(listState = listState) {
         LazyColumn(
             state = listState,
-            modifier = Modifier
-                .padding(bottom = bottomPadding)
-                .padding(borderPadding),
+            modifier = Modifier.padding(borderPadding),
             verticalArrangement = Arrangement.spacedBy(verticalFieldPadding)
         ) {
             items(conversationList, key = { it.id }) { conversation ->
