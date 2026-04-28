@@ -58,7 +58,7 @@ fun VisitasTheme(
                         error = DarkRed,
                         surfaceContainer = lerp(
                             Color.Black,
-                            scheme.surfaceContainerLow,
+                            DarkGrey,
                             0.65f
                         )
                     )
