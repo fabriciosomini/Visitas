@@ -46,6 +46,7 @@ import com.msmobile.visitas.util.IntentState
 import com.msmobile.visitas.util.ListScreenStyle
 import com.msmobile.visitas.util.borderPadding
 import com.msmobile.visitas.util.cardInnerPadding
+import com.msmobile.visitas.util.floatingBarBottomPadding
 import com.msmobile.visitas.util.horizontalFieldPadding
 import com.msmobile.visitas.util.verticalFieldPadding
 import com.ramcosta.composedestinations.annotation.Destination
@@ -268,6 +269,6 @@ private fun PaddingValues.calculateListBottomPadding(): Dp {
     } else {
         verticalFieldPadding
     }
-    return calculatedBottomPadding.coerceAtLeast(0.dp)
+    return calculatedBottomPadding.coerceAtLeast(0.dp) + floatingBarBottomPadding
 }
 

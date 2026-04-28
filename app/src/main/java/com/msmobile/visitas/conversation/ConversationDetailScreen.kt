@@ -57,6 +57,7 @@ import com.msmobile.visitas.ui.views.LazyColumnWithScrollbar
 import com.msmobile.visitas.ui.views.TextFieldClearButton
 import com.msmobile.visitas.util.DetailScreenStyle
 import com.msmobile.visitas.util.borderPadding
+import com.msmobile.visitas.util.floatingBarBottomPadding
 import com.msmobile.visitas.util.verticalFieldPadding
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -152,7 +153,7 @@ private fun ConversationItems(
                 Spacer(
                     modifier = Modifier
                         .imePadding()
-                        .padding(bottom = bottomPadding)
+                        .padding(bottom = bottomPadding + floatingBarBottomPadding)
                 )
             }
         }
