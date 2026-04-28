@@ -69,9 +69,7 @@ fun AppScaffold(
                             }
                         },
                         content = {
-                            if (uiState.scaffoldState.showBottomBar) {
-                                BottomNavigation(currentDestination, onNavigateToTab)
-                            }
+                            BottomNavigation(currentDestination, onNavigateToTab)
                         }
                     )
                 }
