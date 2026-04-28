@@ -59,7 +59,7 @@ fun VisitasTheme(
                         surfaceContainer = lerp(
                             Color.Black,
                             scheme.surfaceContainerLow,
-                            0.55f
+                            0.65f
                         )
                     )
                 }
