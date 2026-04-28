@@ -230,8 +230,7 @@ private fun VisitDetail(
         LazyColumn(
             state = listState,
             modifier = Modifier
-                .padding(bottom = bottomPadding)
-                .padding(borderPadding),
+                .padding(horizontal = borderPadding),
             verticalArrangement = Arrangement.spacedBy(verticalFieldPadding)
         ) {
             item {
