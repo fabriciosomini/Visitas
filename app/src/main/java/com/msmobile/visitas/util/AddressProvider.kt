@@ -54,6 +54,12 @@ class AddressProvider(
     }
 
     private suspend fun getCurrentLocationWithRetry(): Location? {
+        // Fast path: use last known location if it is recent and accurate enough
+        val lastLocation = getLastKnownLocation()
+        if (lastLocation != null && isLocationAcceptable(lastLocation, LOCATION_ACCURACY)) {
+            return lastLocation
+        }
+
         var attempts = 0
         while (attempts < MAX_RETRY_ATTEMPTS) {
             try {
@@ -96,6 +102,20 @@ class AddressProvider(
             }
         }
         return listOf()
+    }
+
+    @SuppressLint("MissingPermission")
+    private suspend fun getLastKnownLocation(): Location? {
+        return suspendCancellableCoroutine { cont ->
+            locationProviderClient.lastLocation
+                .addOnSuccessListener { location -> cont.resume(location) }
+                .addOnFailureListener { cont.resume(null) }
+        }
+    }
+
+    private fun isLocationAcceptable(location: Location, accuracy: Int): Boolean {
+        val ageMs = System.currentTimeMillis() - location.time
+        return location.hasAccuracy() && location.accuracy < accuracy && ageMs < LAST_LOCATION_MAX_AGE_MS
     }
 
     @SuppressLint("MissingPermission")
@@ -229,14 +249,15 @@ class AddressProvider(
     }
 
     private companion object {
-        private const val LOCATION_REQUEST_INTERVAL = 5_000L
+        private const val LOCATION_REQUEST_INTERVAL = 3_000L
         private const val MAX_ADDRESS_RESULTS = 10
         private const val LOCATION_ACCURACY = 20
         private const val LOCATION_ACCURACY_TOLERANCE = 5
         private const val CLOSE_DISTANCE_IN_METERS = 100.0
         private const val MEDIUM_DISTANCE_IN_METERS = 500.0
-        private const val MAX_RETRY_ATTEMPTS = 5
-        private const val RETRY_DELAY = 2000L // 2 seconds
+        private const val MAX_RETRY_ATTEMPTS = 3
+        private const val RETRY_DELAY = 500L // 0.5 seconds
         private const val MIN_UPDATE_DISTANCE_IN_METERS = 0f
+        private const val LAST_LOCATION_MAX_AGE_MS = 60_000L // 60 seconds
     }
 }
