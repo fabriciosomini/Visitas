@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.msmobile.visitas.R
 import com.msmobile.visitas.util.borderPadding
+import com.msmobile.visitas.util.horizontalFieldPadding
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -34,7 +35,9 @@ fun DetailFooter(
     Box(modifier = modifier.fillMaxSize()) {
         if (showDeleteButton) {
             FloatingBar(
-                modifier = Modifier.align(Alignment.BottomStart).padding(start = borderPadding),
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(start = borderPadding),
                 floatingActionButton = {},
                 content = {
                     IconButton(onClick = onDeleteClicked) {
