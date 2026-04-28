@@ -14,7 +14,6 @@ import com.google.android.gms.location.Priority
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeoutOrNull
-import kotlin.coroutines.resume
 
 class AddressProvider(
     private val geocoder: Geocoder,
@@ -108,8 +107,9 @@ class AddressProvider(
     private suspend fun getLastKnownLocation(): Location? {
         return suspendCancellableCoroutine { cont ->
             locationProviderClient.lastLocation
-                .addOnSuccessListener { location -> cont.resume(location) }
-                .addOnFailureListener { cont.resume(null) }
+                .addOnSuccessListener { location -> cont.resumeIfActive(location) }
+                .addOnFailureListener { cont.resumeIfActive(null) }
+                .addOnCanceledListener { cont.resumeIfActive(null) }
         }
     }
 
@@ -125,7 +125,7 @@ class AddressProvider(
                 var locationListener: LocationListener? = null
                 locationListener = LocationListener { location ->
                     if (location.hasAccuracy() && location.accuracy < accuracy) {
-                        cont.resume(location)
+                        cont.resumeIfActive(location)
                         locationListener?.let { listener ->
                             locationProviderClient.removeLocationUpdates(listener)
                         }
@@ -142,7 +142,13 @@ class AddressProvider(
                     locationListener,
                     looper
                 ).addOnFailureListener {
-                    cont.resume(null)
+                    cont.resumeIfActive(null)
+                }
+
+                cont.invokeOnCancellation {
+                    locationListener?.let { listener ->
+                        locationProviderClient.removeLocationUpdates(listener)
+                    }
                 }
             }
         }
@@ -165,7 +171,7 @@ class AddressProvider(
                             longitude = address.longitude
                         )
                     }
-                    cont.resume(addressSpecs)
+                    cont.resumeIfActive(addressSpecs)
                 }
             }
         } ?: listOf()
@@ -180,13 +186,13 @@ class AddressProvider(
             suspendCancellableCoroutine { cont ->
                 geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
                     val address = addresses.firstOrNull() ?: run {
-                        cont.resume(AddressSpecs.NoData)
+                        cont.resumeIfActive(AddressSpecs.NoData)
                         return@getFromLocation
                     }
                     if (address.thoroughfare == null) {
-                        cont.resume(AddressSpecs.NoData)
+                        cont.resumeIfActive(AddressSpecs.NoData)
                     } else {
-                        cont.resume(
+                        cont.resumeIfActive(
                             AddressSpecs.Data(
                                 address = address.toStreetAddressString(),
                                 latitude = address.latitude,
