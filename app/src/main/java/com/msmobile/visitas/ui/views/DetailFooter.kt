@@ -3,6 +3,7 @@ package com.msmobile.visitas.ui.views
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.msmobile.visitas.R
+import com.msmobile.visitas.util.borderPadding
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -30,6 +32,21 @@ fun DetailFooter(
     extraButtons: @Composable () -> Unit = {}
 ) {
     Box(modifier = modifier.fillMaxSize()) {
+        if (showDeleteButton) {
+            FloatingBar(
+                modifier = Modifier.align(Alignment.BottomStart).padding(start = borderPadding),
+                floatingActionButton = {},
+                content = {
+                    IconButton(onClick = onDeleteClicked) {
+                        Icon(
+                            imageVector = Icons.Rounded.Delete,
+                            contentDescription = stringResource(id = R.string.delete)
+                        )
+                    }
+                }
+            )
+        }
+
         FloatingBar(
             modifier = Modifier.align(Alignment.BottomCenter),
             floatingActionButton = {
@@ -41,15 +58,6 @@ fun DetailFooter(
             },
             content = {
                 Row {
-                    if (showDeleteButton) {
-                        IconButton(onClick = onDeleteClicked) {
-                            Icon(
-                                imageVector = Icons.Rounded.Delete,
-                                contentDescription = stringResource(id = R.string.delete)
-                            )
-                        }
-                    }
-
                     IconButton(onClick = onCancelClickedEvent) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBackIosNew,
