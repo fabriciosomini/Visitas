@@ -24,6 +24,7 @@ fun FloatingBar(
             toolbarContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f)
         ),
         floatingActionButton = floatingActionButton,
+        expandedShadowElevation = FloatingToolbarDefaults.ContainerExpandedElevationWithFab * 3,
         content = content
     )
 }
